@@ -1,16 +1,132 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:quran/models/surah.dart';
 
 const primaryColor = Colors.brown;
 const secondaryColor = Colors.brown;
-
 
 const List<String> orderTypes = [
   "طلب عام",
   "طلب صيانه",
   "طلب معاينه",
   "طلب تركيب",
+];
+
+List<Surah> surahList = [
+  Surah(0, "السورة"),
+  Surah(1, "1. Al-Fatiha    سورة الفاتحة"),
+  Surah(2, "2. Al-Baqara    سورة البقرة"),
+  Surah(50, "3. Aal-e-Imran    سورة آل عمران"),
+  Surah(77, "4. An-Nisa    سورة النساء"),
+  Surah(0, "5. Al-Maeda    سورة المائدة"),
+  Surah(0, "6. Al-Anaam    سورة الأنعام"),
+  Surah(0, "7. Al-Araf    سورة الأعراف"),
+  Surah(0, "8. Al-Anfal    سورة الأنفال"),
+  Surah(0, "9. At-Taubah    سورة التوبة"),
+  Surah(0, "10. Yunus    سورة يونس"),
+  Surah(0, "11. Hud    سورة هود"),
+  Surah(0, "12. Yusuf    سورة يوسف"),
+  Surah(0, "13. Ar-Rad    سورة الرعد"),
+  Surah(0, "14. Ibrahim    سورة إبراهيم"),
+  Surah(0, "15. Al-Hijr    سورة الحجر"),
+  Surah(0, "16. An-Nahl    سورة النحل"),
+  Surah(0, "17. Al-Isra    سورة الإسراء"),
+  Surah(0, "18.Al-Kahf    سورة الكهف"),
+  Surah(0, "19. Maryam    سورة مريم"),
+  Surah(0, "20. Taha    سورة طه"),
+  Surah(0, "21. Al-Anbiya    سورة الأنبياء"),
+  Surah(0, "22. Al-Hajj    سورة الحج"),
+  Surah(0, "23. Al-Mumenoon    سورة المؤمنون"),
+  Surah(0, "24. An-Noor    سورة النور"),
+  Surah(0, "25. Al-Furqan    سورة الفرقان"),
+  Surah(0, "26. Ash-Shuara    سورة الشعراء"),
+  Surah(0, "27. An-Naml    سورة النمل"),
+  Surah(0, "28. Al-Qasas    سورة القصص"),
+  Surah(0, "29. Al-Ankaboot    سورة العنكبوت"),
+  Surah(0, "30. Ar-Room    سورة الروم"),
+  Surah(0, "31. Luqman    سورة لقمان"),
+  Surah(0, "32. As-Sajda    سورة السجدة"),
+  Surah(0, "33. Al-Ahzab    سورة الأحزاب"),
+  Surah(0, "34. Saba    سورة سبأ"),
+  Surah(0, "35. Fatir    سورة فاطر"),
+  Surah(0, "36. Ya Seen    سورة يس"),
+  Surah(0, "37. As-Saaffat    سورة الصافات"),
+  Surah(0, "38. Sad    سورة ص"),
+  Surah(0, "39. Az-Zumar    سورة الزمر"),
+  Surah(0, "40. Ghafir    سورة غافر"),
+  Surah(0, "41. Fussilat    سورة فصلت"),
+  Surah(0, "42. Ash-Shura    سورة الشورى"),
+  Surah(0, "43. Az-Zukhruf    سورة الزخرف"),
+  Surah(0, "44. Ad-Dukhan    سورة الدخان"),
+  Surah(0, "45. Al-Jathiya    سورة الجاثية"),
+  Surah(0, "46. Al-Ahqaf    سورة الأحقاف"),
+  Surah(0, "47. Muhammad    سورة محمد"),
+  Surah(0, "48. Al-Fath    سورة الفتح"),
+  Surah(0, "49. Al-Hujraat    سورة الحجرات"),
+  Surah(0, "50. Qaf    سورة ق"),
+  Surah(0, "51. Adh-Dhariyat    سورة الذاريات"),
+  Surah(0, "52. At-tur    سورة الطور"),
+  Surah(0, "53. An-Najm    سورة النجم"),
+  Surah(0, "54. Al-Qamar    سورة القمر"),
+  Surah(0, "55. Ar-Rahman    سورة الرحمن"),
+  Surah(0, "56. Al-Waqia    سورة الواقعة"),
+  Surah(0, "57. Al-Hadid    سورة الحديد"),
+  Surah(0, "58. Al-Mujadila    سورة المجادلة"),
+  Surah(0, "59. Al-Hashr    سورة الحشر"),
+  Surah(0, "60. Al-Mumtahana    سورة الممتحنة"),
+  Surah(0, "61. As-Saff    سورة الصف"),
+  Surah(0, "62. Al-Jumua    سورة الجمعة"),
+  Surah(0, "63. Al-Munafiqoon    سورة المنافقون"),
+  Surah(0, "64. At-Taghabun  سورة التغا"),
+  Surah(0, "65. At-Talaq    سورة الطلاق"),
+  Surah(0, "66. At-Tahrim    سورة التحريم"),
+  Surah(0, "67. Al-Mulk    سورة الملك"),
+  Surah(0, "68. Al-Qalam    سورة القلم"),
+  Surah(0, "69. Al-Haaqqa    سورة الحاقة"),
+  Surah(0, "70. Al-Maarij    سورة المعارج"),
+  Surah(0, "71. Nooh    سورة نوح"),
+  Surah(0, "72. Al-Jinn    سورة الجن"),
+  Surah(0, "73. Al-Muzzammil    سورة المزمل"),
+  Surah(0, "74. Al-Muddathir    سورة المدثر"),
+  Surah(0, "75. Al-Qiyama    سورة القيامة"),
+  Surah(0, "76. Al-Insan    سورة الإنسان"),
+  Surah(0, "77. Al-Mursalat    سورة المرسلات"),
+  Surah(0, "78. An-Naba    سورة النبأ"),
+  Surah(0, "79. An-Naziat    سورة النازعات"),
+  Surah(0, "80. Abasa    سورة عبس"),
+  Surah(0, "81. At-Takwir    سورة التكوير"),
+  Surah(0, "82. AL-Infitar    سورة الإنفطار"),
+  Surah(0, "83. Al-Mutaffifin    سورة المطففين"),
+  Surah(0, "84. Al-Inshiqaq    سورة الانشقاق"),
+  Surah(0, "85. Al-Burooj    سورة البروج"),
+  Surah(0, "86. At-Tariq    سورة الطارق"),
+  Surah(0, "87. Al-Ala    سورة الأعلى"),
+  Surah(0, "88. Al-Ghashiya    سورة الغاشية"),
+  Surah(0, "89. Al-Fajr    سورة الفجر"),
+  Surah(0, "90. Al-Balad    سورة البلد"),
+  Surah(0, "91. Ash-Shams    سورة الشمس"),
+  Surah(0, "92. Al-Lail    سورة الليل"),
+  Surah(0, "93. Ad-Dhuha    سورة الضحى"),
+  Surah(0, "94. Al-Inshirah    سورة الشرح"),
+  Surah(0, "95. At-Tin    سورة التين"),
+  Surah(0, "96. Al-Alaq    سورة العلق"),
+  Surah(0, "97. Al-Qadr    سورة القدر"),
+  Surah(0, "98. Al-Bayyina    سورة البينة"),
+  Surah(0, "99. Al-Zalzala    سورة الزلزلة"),
+  Surah(0, "100. Al-Adiyat    سورة العاديات"),
+  Surah(0, "101. Al-Qaria    سورة القارعة"),
+  Surah(0, "102. At-Takathur    سورة التكاثر"),
+  Surah(0, "103. Al-Asr    سورة العصر"),
+  Surah(0, "104. Al-Humaza    سورة الهمزة"),
+  Surah(0, "105. Al-fil    سورة الفيل"),
+  Surah(0, "106. Quraish    سورة قريش"),
+  Surah(0, "107. Al-Maun    سورة الماعون"),
+  Surah(0, "108. Al-Kauther    سورة الكوثر"),
+  Surah(0, "109. Al-Kafiroon    سورة الكافرون"),
+  Surah(0, "110. An-Nasr    سورة النصر"),
+  Surah(0, "111. Al-Masadd    سورة المسد"),
+  Surah(0, "112. Al-Ikhlas    سورة الإخلاص"),
+  Surah(0, "113. Al-Falaq    سورة الفلق"),
+  Surah(0, "114. An-Nas    سورة الناس")
 ];
 
 const List<String> surah = [
@@ -179,117 +295,3 @@ const List<Color> states_color = [
   Colors.green,
   Colors.red
 ];
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

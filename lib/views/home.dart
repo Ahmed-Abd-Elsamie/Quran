@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:quran/controllers/main_controller.dart';
+import 'package:quran/models/surah.dart';
 import 'package:quran/utils/constants.dart';
 import 'package:quran/views/widget/page_content.dart';
 
@@ -31,11 +32,11 @@ class Home extends GetWidget<MainController> {
                     return _mainController.currentPage == null
                         ? CircularProgressIndicator()
                         : PageView.builder(
-                            controller: PageController(
-                                initialPage: _mainController.currentPage! - 1),
+                            controller: _mainController.pageController,
                             onPageChanged: (value) {
                               _mainController.checkLocal(value + 1);
                               _mainController.saveLastPage(value + 1);
+                              _mainController.changeCurrentPage(value + 1);
                             },
                             itemCount: 604,
                             reverse: true,
@@ -48,9 +49,12 @@ class Home extends GetWidget<MainController> {
                                       },
                                       child: Container(
                                           child: PageContent(
-                                        page: (index + 1),
-                                        dir: (((index + 1) % 2) == 0),
-                                        path: justDownloaded[index + 1],
+                                        page: (_mainController.currentPage!),
+                                        dir: (((_mainController.currentPage!) %
+                                                2) ==
+                                            0),
+                                        path: justDownloaded[
+                                            _mainController.currentPage],
                                       )),
                                     )
                                   : Container(
@@ -59,16 +63,16 @@ class Home extends GetWidget<MainController> {
                                           showLoading();
                                           String url =
                                               "https://www.searchtruth.org/quran/images8/" +
-                                                  (index + 1).toString() +
+                                                  (_mainController.currentPage).toString() +
                                                   ".png";
                                           String? path = await _mainController
-                                              .downloadImage(url, (index + 1));
+                                              .downloadImage(url, (_mainController.currentPage!));
 
                                           if (path != "") {
                                             print("Download Success");
                                             _mainController.update();
                                             _mainController.setExist();
-                                            justDownloaded[index + 1] = path!;
+                                            justDownloaded[_mainController.currentPage!] = path!;
                                             Phoenix.rebirth(context);
                                           }
                                           hideLoading();
@@ -213,18 +217,25 @@ class Home extends GetWidget<MainController> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: DropdownSearch<String>(
-                    items: surah,
-                    itemAsString: (String c) => c,
-                    selectedItem: surah[0],
-                    onChanged: (String? data) {},
+                  child: DropdownSearch<Surah>(
+                    items: surahList,
+                    itemAsString: (Surah c) => c.name,
+                    selectedItem: surahList[0],
+                    onChanged: (Surah? data) {
+                      if (data!.page == 0) {
+                        return;
+                      }
+                      _mainController.checkLocal(data.page);
+                      _mainController.saveLastPage(data.page);
+                      _mainController.changeSurah(data.page);
+                    },
                     dropdownDecoratorProps:
                         DropDownDecoratorProps(textAlign: TextAlign.center),
-                    dropdownBuilder: (ctx, city) {
+                    dropdownBuilder: (ctx, surah) {
                       return Container(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          city!,
+                          surah!.name,
                           textAlign: TextAlign.right,
                           style: TextStyle(color: Colors.black),
                         ),

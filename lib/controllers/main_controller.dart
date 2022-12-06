@@ -29,6 +29,8 @@ class MainController extends GetxController {
 
   bool cancelDownload = false;
 
+  PageController pageController = PageController();
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -50,6 +52,7 @@ class MainController extends GetxController {
     final int? page = prefs.getInt('last_page');
     print("PPPP" + page.toString());
     _currentPage.value = (page == null ? 1 : page);
+    pageController = PageController(initialPage: _currentPage.value! - 1);
     checkLocal(_currentPage.value!);
   }
 
@@ -58,16 +61,6 @@ class MainController extends GetxController {
     print("PPPP" + page.toString());
     await prefs.setInt('last_page', page);
   }
-
-  /*void checkLocal(int page) async {
-    _loading_local.value = true;
-    update();
-    var f = _getLocalFile(page);
-    _exist.value = await f.exists();
-    print("FILE EE" + exist.toString());
-    _loading_local.value = false;
-    update();
-  }*/
 
   void checkLocal(int page) async {
     var f = _getLocalFile(page);
@@ -104,7 +97,7 @@ class MainController extends GetxController {
     }
   }
 
-  void cancelDownloadAllImages(){
+  void cancelDownloadAllImages() {
     cancelDownload = true;
   }
 
@@ -112,7 +105,7 @@ class MainController extends GetxController {
     cancelDownload = false;
     int tot = 1;
     for (int page = 1; page <= 604; page++) {
-      if (cancelDownload){
+      if (cancelDownload) {
         break;
       }
       try {
@@ -153,16 +146,21 @@ class MainController extends GetxController {
     update();
   }
 
-  void setDownloadVisible(){
+  void setDownloadVisible() {
     _showDownload.value = true;
     update();
   }
 
-  void setDownloadInVisible(){
+  void setDownloadInVisible() {
     _showDownload.value = false;
     update();
   }
 
+  void changeCurrentPage(int page) {
+    _currentPage.value = page;
+  }
 
-
+  void changeSurah(int page) {
+    pageController.jumpToPage(page - 1);
+  }
 }
