@@ -155,24 +155,18 @@ class Home extends GetWidget<MainController> {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             TextButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                // check if the current page already downloaded
+                                if(_mainController.exist!){
+                                  _mainController.sharePage();
+                                }
+                              },
                               label: Text(
                                 "مشاركه",
                                 style: TextStyle(color: Colors.white),
                               ),
                               icon: Icon(
                                 Icons.share,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: () {},
-                              label: Text(
-                                "نسخ",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.copy,
                                 color: Colors.white,
                               ),
                             ),

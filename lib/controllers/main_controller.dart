@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class MainController extends GetxController {
@@ -162,5 +163,13 @@ class MainController extends GetxController {
 
   void changeSurah(int page) {
     pageController.jumpToPage(page - 1);
+  }
+
+  void sharePage() {
+    Share.shareFiles([
+      '/storage/emulated/0/Android/data/com.deksheno.quran/files/DekshenoQuran/' +
+          _currentPage.value.toString() +
+          '.png'
+    ], text: 'ورد اليوم');
   }
 }
