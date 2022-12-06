@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:quran/controllers/main_controller.dart';
+import 'package:quran/models/part.dart';
 import 'package:quran/models/surah.dart';
 import 'package:quran/utils/constants.dart';
 import 'package:quran/views/widget/page_content.dart';
@@ -63,16 +64,21 @@ class Home extends GetWidget<MainController> {
                                           showLoading();
                                           String url =
                                               "https://www.searchtruth.org/quran/images8/" +
-                                                  (_mainController.currentPage).toString() +
+                                                  (_mainController.currentPage)
+                                                      .toString() +
                                                   ".png";
                                           String? path = await _mainController
-                                              .downloadImage(url, (_mainController.currentPage!));
+                                              .downloadImage(
+                                                  url,
+                                                  (_mainController
+                                                      .currentPage!));
 
                                           if (path != "") {
                                             print("Download Success");
                                             _mainController.update();
                                             _mainController.setExist();
-                                            justDownloaded[_mainController.currentPage!] = path!;
+                                            justDownloaded[_mainController
+                                                .currentPage!] = path!;
                                             Phoenix.rebirth(context);
                                           }
                                           hideLoading();
@@ -116,10 +122,18 @@ class Home extends GetWidget<MainController> {
                                 color: Colors.white,
                               ),
                             ),
-                            Text(
-                              "سوره الفاتحه",
-                              style: TextStyle(color: Colors.white),
-                            )
+                            Obx(() {
+                              return Text(
+                                surahList
+                                    .where((element) =>
+                                        element.page <=
+                                        _mainController.currentPage!)
+                                    .toList()
+                                    .last
+                                    .name,
+                                style: TextStyle(color: Colors.white),
+                              );
+                            })
                           ],
                         ),
                       ),
@@ -248,18 +262,23 @@ class Home extends GetWidget<MainController> {
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: DropdownSearch<String>(
-                    items: parts,
-                    itemAsString: (String c) => c,
-                    selectedItem: parts[0],
-                    onChanged: (String? data) {},
+                  child: DropdownSearch<Part>(
+                    items: partsList,
+                    itemAsString: (Part c) => c.name,
+                    selectedItem: partsList[0],
+                    onChanged: (Part? data) {
+                      if (data!.page == 0) {
+                        return;
+                      }
+                      _mainController.changeSurah(data.page);
+                    },
                     dropdownDecoratorProps:
                         DropDownDecoratorProps(textAlign: TextAlign.center),
-                    dropdownBuilder: (ctx, city) {
+                    dropdownBuilder: (ctx, part) {
                       return Container(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          city!,
+                          part!.name,
                           textAlign: TextAlign.right,
                           style: TextStyle(color: Colors.black),
                         ),
