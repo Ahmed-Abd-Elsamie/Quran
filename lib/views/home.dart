@@ -61,36 +61,84 @@ class Home extends GetWidget<MainController> {
                                       )),
                                     )
                                   : Container(
-                                      child: TextButton(
-                                        onPressed: () async {
-                                          showLoading();
-                                          String url =
-                                              "https://www.searchtruth.org/quran/images8/" +
-                                                  (_mainController.currentPage)
-                                                      .toString() +
-                                                  ".png";
-                                          String? path = await _mainController
-                                              .downloadImage(
-                                                  url,
-                                                  (_mainController
-                                                      .currentPage!));
+                                      padding: EdgeInsets.only(top: 200),
+                                      child: Column(
+                                        children: [
+                                          TextButton(
+                                            style: ButtonStyle(
+                                                fixedSize:
+                                                    MaterialStateProperty.all(
+                                                        Size(150, 50)),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.brown)),
+                                            onPressed: () async {
+                                              showLoading();
+                                              String url =
+                                                  "https://www.searchtruth.org/quran/images8/" +
+                                                      (_mainController
+                                                              .currentPage)
+                                                          .toString() +
+                                                      ".png";
+                                              String? path =
+                                                  await _mainController
+                                                      .downloadImage(
+                                                          url,
+                                                          (_mainController
+                                                              .currentPage!));
 
-                                          if (path != "") {
-                                            print("Download Success");
-                                            _mainController.update();
-                                            _mainController.setExist();
-                                            justDownloaded[_mainController
-                                                .currentPage!] = path!;
-                                            Phoenix.rebirth(context);
-                                          }
-                                          hideLoading();
-                                        },
-                                        child: Text(
-                                          "تحميل الصفحه",
-                                          style: TextStyle(
-                                            fontSize: 20,
+                                              if (path != "") {
+                                                print("Download Success");
+                                                _mainController.update();
+                                                _mainController.setExist();
+                                                justDownloaded[_mainController
+                                                    .currentPage!] = path!;
+                                                Phoenix.rebirth(context);
+                                              }
+                                              hideLoading();
+                                            },
+                                            child: Text(
+                                              "تحميل الصفحه",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
                                           ),
-                                        ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          TextButton(
+                                            style: ButtonStyle(
+                                                fixedSize:
+                                                    MaterialStateProperty.all(
+                                                        Size(200, 50)),
+                                                backgroundColor:
+                                                    MaterialStateProperty.all(
+                                                        Colors.brown)),
+                                            onPressed: () async {
+                                              toggleDrawer();
+                                              _mainController
+                                                  .setDownloadVisible();
+                                              //showLoading();
+                                              bool state = await _mainController
+                                                  .downloadAllImages();
+                                              if (state == true) {
+                                                print("all pages downloaded");
+                                              } else {
+                                                print(
+                                                    "failed to download all pages");
+                                              }
+                                              _mainController
+                                                  .setDownloadInVisible();
+                                            },
+                                            child: Text(
+                                              "تحميل كل الصفحات",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  color: Colors.white),
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     );
                             }),
@@ -159,7 +207,7 @@ class Home extends GetWidget<MainController> {
                             TextButton.icon(
                               onPressed: () {
                                 // check if the current page already downloaded
-                                if(_mainController.exist!){
+                                if (_mainController.exist!) {
                                   _mainController.sharePage();
                                 }
                               },
@@ -177,13 +225,19 @@ class Home extends GetWidget<MainController> {
                                 showMaterialModalBottomSheet(
                                   context: context,
                                   builder: (context) => SingleChildScrollView(
-                                    controller: ModalScrollController.of(context),
+                                    controller:
+                                        ModalScrollController.of(context),
                                     child: Container(
                                       padding: EdgeInsets.all(15),
                                       height: 200,
                                       child: Column(
                                         children: [
-                                          Text("قريبا ان شاء الله في الاصدارات القادمه", style: TextStyle(color: Colors.black, fontSize: 20),),
+                                          Text(
+                                            "قريبا ان شاء الله في الاصدارات القادمه",
+                                            style: TextStyle(
+                                                color: Colors.black,
+                                                fontSize: 20),
+                                          ),
                                         ],
                                       ),
                                     ),
