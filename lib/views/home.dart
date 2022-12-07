@@ -8,6 +8,7 @@ import 'package:quran/controllers/main_controller.dart';
 import 'package:quran/models/part.dart';
 import 'package:quran/models/surah.dart';
 import 'package:quran/utils/constants.dart';
+import 'package:quran/views/saved_marks.dart';
 import 'package:quran/views/widget/page_content.dart';
 
 class Home extends GetWidget<MainController> {
@@ -182,7 +183,9 @@ class Home extends GetWidget<MainController> {
                               ),
                             ),
                             TextButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                _mainController.addToMarks();
+                              },
                               label: Text(
                                 "علامه",
                                 style: TextStyle(color: Colors.white),
@@ -284,7 +287,9 @@ class Home extends GetWidget<MainController> {
                   height: 20,
                 ),
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    Get.to(SavedMarks());
+                  },
                   label: Text(
                     "العلامات",
                     style: TextStyle(color: Colors.black, fontSize: 20),
