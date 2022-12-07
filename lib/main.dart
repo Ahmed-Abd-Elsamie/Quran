@@ -39,6 +39,8 @@ Future<void> main() async {
 
   FirebaseMessaging.onBackgroundMessage(_onMessageReceived);
 
+  FirebaseMessaging.instance.subscribeToTopic("notifications");
+
   runApp(const MyApp());
 }
 
