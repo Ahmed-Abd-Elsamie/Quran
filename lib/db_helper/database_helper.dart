@@ -46,6 +46,7 @@ class DatabaseHelper {
   }
 
   Future<Mark> insertMark(Mark mark) async {
+    print("MMMM : " + mark.type.toString());
     Database db = await instance.database;
     mark.id = await db.insert('marks', mark.toMap());
     return mark;

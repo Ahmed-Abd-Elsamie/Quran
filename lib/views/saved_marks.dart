@@ -35,6 +35,7 @@ class SavedMarks extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ))),
                             onPressed: () {
+                              print(_mainController.marksList[index].type.toString());
                               _mainController.changeSurah(
                                   _mainController.marksList[index].page_num);
                               Get.back();
@@ -72,6 +73,13 @@ class SavedMarks extends StatelessWidget {
                                             " صفحه رقم " +
                                             _mainController
                                                 .marksList[index].page_num
+                                                .toString(),
+                                            textAlign: TextAlign.end,
+                                            textDirection: TextDirection.ltr,
+                                            style: TextStyle(fontSize: 17)),
+                                        new Text(
+                                            _mainController
+                                                .marksList[index].type == 1 ? "علامه القراءه" : "علامه الحفظ"
                                                 .toString(),
                                             textAlign: TextAlign.end,
                                             textDirection: TextDirection.ltr,
