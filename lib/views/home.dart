@@ -368,7 +368,30 @@ class Home extends GetWidget<MainController> {
                   icon: Icon(Icons.bookmark_outline_sharp),
                 ),
                 TextButton.icon(
-                  onPressed: () {},
+                  onPressed: () {
+                    toggleDrawer();
+                    showMaterialModalBottomSheet(
+                      context: context,
+                      builder: (context) => SingleChildScrollView(
+                        controller:
+                        ModalScrollController.of(context),
+                        child: Container(
+                          padding: EdgeInsets.all(15),
+                          height: 200,
+                          child: Column(
+                            children: [
+                              Text(
+                                "قريبا ان شاء الله في الاصدارات القادمه",
+                                style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 20),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  },
                   label: Text(
                     "التفاسير",
                     style: TextStyle(color: Colors.black, fontSize: 20),
