@@ -53,7 +53,7 @@ class MyApp extends StatelessWidget {
 
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Computer Shop',
+      title: 'Quran - قران',
       theme: ThemeData(
           primarySwatch: primaryColor,
           fontFamily: "Tajawal"
@@ -76,7 +76,7 @@ Future<void> _onMessageReceived(RemoteMessage message) async {
       content: NotificationContent(
           id: DateTime.now().millisecond,
           channelKey: 'basic_channel',
-          color: Colors.red,
+          color: Colors.brown,
           title: message.data['title'],
           body: message.data['body']
       )
