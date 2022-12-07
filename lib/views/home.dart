@@ -4,6 +4,7 @@ import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/controllers/main_controller.dart';
 import 'package:quran/models/part.dart';
 import 'package:quran/models/surah.dart';
@@ -172,7 +173,23 @@ class Home extends GetWidget<MainController> {
                               ),
                             ),
                             TextButton.icon(
-                              onPressed: () {},
+                              onPressed: () {
+                                showMaterialModalBottomSheet(
+                                  context: context,
+                                  builder: (context) => SingleChildScrollView(
+                                    controller: ModalScrollController.of(context),
+                                    child: Container(
+                                      padding: EdgeInsets.all(15),
+                                      height: 200,
+                                      child: Column(
+                                        children: [
+                                          Text("قريبا ان شاء الله في الاصدارات القادمه", style: TextStyle(color: Colors.black, fontSize: 20),),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              },
                               label: Text(
                                 "تفسير",
                                 style: TextStyle(color: Colors.white),
