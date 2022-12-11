@@ -87,7 +87,7 @@ class MainController extends GetxController {
 
   File _getLocalFile(int page) {
     File file = new File(
-        '/storage/emulated/0/Android/data/com.deksheno.quran/files/DekshenoQuran/' +
+        '/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/' +
             page.toString() +
             '.png');
     return file;
@@ -97,7 +97,7 @@ class MainController extends GetxController {
     try {
       var data = await ImageDownloader.downloadImage(
         url,
-        destination: AndroidDestinationType.custom(directory: 'DekshenoQuran')
+        destination: AndroidDestinationType.custom(directory: 'QuranPages')
           ..inExternalFilesDir()
           ..subDirectory(page.toString() + ".png"),
       );
@@ -130,7 +130,7 @@ class MainController extends GetxController {
             ".png";
         var data = await ImageDownloader.downloadImage(
           url,
-          destination: AndroidDestinationType.custom(directory: 'DekshenoQuran')
+          destination: AndroidDestinationType.custom(directory: 'QuranPages')
             ..inExternalFilesDir()
             ..subDirectory(page.toString() + ".png"),
         );
@@ -184,7 +184,7 @@ class MainController extends GetxController {
 
   void sharePage() {
     Share.shareFiles([
-      '/storage/emulated/0/Android/data/com.deksheno.quran/files/DekshenoQuran/' +
+      '/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/' +
           _currentPage.value.toString() +
           '.png'
     ], text: 'ورد اليوم');
