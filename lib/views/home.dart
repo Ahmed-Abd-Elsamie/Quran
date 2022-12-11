@@ -9,6 +9,7 @@ import 'package:quran/controllers/main_controller.dart';
 import 'package:quran/models/part.dart';
 import 'package:quran/models/surah.dart';
 import 'package:quran/utils/constants.dart';
+import 'package:quran/views/notification_page.dart';
 import 'package:quran/views/saved_marks.dart';
 import 'package:quran/views/widget/page_content.dart';
 
@@ -204,6 +205,13 @@ class Home extends GetWidget<MainController> {
                                 Icons.menu,
                                 color: Colors.white,
                               ),
+                            ),
+                            TextButton.icon(
+                              onPressed: (){
+                                Get.to(NotificationPage());
+                              },
+                              icon: Icon(Icons.notifications, color: Colors.white,),
+                              label: Text("مقتطفات", style: TextStyle(color: Colors.white),),
                             ),
                             Obx(() {
                               return Text(
@@ -428,6 +436,16 @@ class Home extends GetWidget<MainController> {
                     style: TextStyle(color: Colors.black, fontSize: 20),
                   ),
                   icon: Icon(Icons.article_outlined),
+                ),
+                TextButton.icon(
+                  onPressed: () {
+                    Get.to(NotificationPage());
+                  },
+                  label: Text(
+                    "مقتطفات",
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                  ),
+                  icon: Icon(Icons.notifications),
                 ),
                 Divider(
                   height: 3,

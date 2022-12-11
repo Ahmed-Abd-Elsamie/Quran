@@ -34,8 +34,7 @@ Future<void> main() async {
             channelGroupkey: 'basic_channel_group',
             channelGroupName: 'Basic group')
       ],
-      debug: true
-  );
+      debug: true);
 
   FirebaseMessaging.onBackgroundMessage(_onMessageReceived);
 
@@ -50,14 +49,10 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quran - قران',
-      theme: ThemeData(
-          primarySwatch: primaryColor,
-          fontFamily: "Tajawal"
-      ),
+      theme: ThemeData(primarySwatch: primaryColor, fontFamily: "Tajawal"),
       home: AnimatedSplashScreen.withScreenFunction(
         splash: 'assets/images/logo.png',
         duration: 5,
@@ -78,7 +73,8 @@ Future<void> _onMessageReceived(RemoteMessage message) async {
           channelKey: 'basic_channel',
           color: Colors.brown,
           title: message.data['title'],
-          body: message.data['body']
-      )
+          body: message.data['body'],
+          icon: "asset://assets/images/logo.png"
+      ),
   );
 }
