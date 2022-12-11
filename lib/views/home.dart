@@ -107,36 +107,69 @@ class Home extends GetWidget<MainController> {
                                           SizedBox(
                                             height: 10,
                                           ),
-                                          TextButton(
-                                            style: ButtonStyle(
-                                                fixedSize:
-                                                    MaterialStateProperty.all(
-                                                        Size(200, 50)),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.brown)),
-                                            onPressed: () async {
-                                              toggleDrawer();
-                                              _mainController
-                                                  .setDownloadVisible();
-                                              //showLoading();
-                                              bool state = await _mainController
-                                                  .downloadAllImages();
-                                              if (state == true) {
-                                                print("all pages downloaded");
-                                              } else {
-                                                print(
-                                                    "failed to download all pages");
-                                              }
-                                              _mainController
-                                                  .setDownloadInVisible();
+                                          GetBuilder<MainController>(
+                                            builder: (c){
+                                              return _mainController.showDownload.value ==
+                                                  true
+                                                  ? TextButton(
+                                                style: ButtonStyle(
+                                                    fixedSize:
+                                                    MaterialStateProperty
+                                                        .all(Size(
+                                                        200, 50)),
+                                                    backgroundColor:
+                                                    MaterialStateProperty
+                                                        .all(Colors
+                                                        .brown)),
+                                                onPressed: () async {
+                                                  _mainController
+                                                      .cancelDownloadAllImages();
+                                                  _mainController
+                                                      .setDownloadInVisible();
+                                                },
+                                                child: Text(
+                                                  "الغاء تحميل الصفحات",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              )
+                                                  : TextButton(
+                                                style: ButtonStyle(
+                                                    fixedSize:
+                                                    MaterialStateProperty
+                                                        .all(Size(
+                                                        200, 50)),
+                                                    backgroundColor:
+                                                    MaterialStateProperty
+                                                        .all(Colors
+                                                        .brown)),
+                                                onPressed: () async {
+                                                  toggleDrawer();
+                                                  _mainController
+                                                      .setDownloadVisible();
+                                                  //showLoading();
+                                                  bool state =
+                                                  await _mainController
+                                                      .downloadAllImages();
+                                                  if (state == true) {
+                                                    print(
+                                                        "all pages downloaded");
+                                                  } else {
+                                                    print(
+                                                        "failed to download all pages");
+                                                  }
+                                                  _mainController
+                                                      .setDownloadInVisible();
+                                                },
+                                                child: Text(
+                                                  "تحميل كل الصفحات",
+                                                  style: TextStyle(
+                                                      fontSize: 20,
+                                                      color: Colors.white),
+                                                ),
+                                              );
                                             },
-                                            child: Text(
-                                              "تحميل كل الصفحات",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                            ),
                                           )
                                         ],
                                       ),
@@ -373,8 +406,7 @@ class Home extends GetWidget<MainController> {
                     showMaterialModalBottomSheet(
                       context: context,
                       builder: (context) => SingleChildScrollView(
-                        controller:
-                        ModalScrollController.of(context),
+                        controller: ModalScrollController.of(context),
                         child: Container(
                           padding: EdgeInsets.all(15),
                           height: 200,
@@ -383,8 +415,7 @@ class Home extends GetWidget<MainController> {
                               Text(
                                 "قريبا ان شاء الله في الاصدارات القادمه",
                                 style: TextStyle(
-                                    color: Colors.black,
-                                    fontSize: 20),
+                                    color: Colors.black, fontSize: 20),
                               ),
                             ],
                           ),

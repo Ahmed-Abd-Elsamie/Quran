@@ -116,8 +116,11 @@ class MainController extends GetxController {
 
   Future<bool> downloadAllImages() async {
     cancelDownload = false;
-    int tot = 1;
-    for (int page = 1; page <= 604; page++) {
+    final prefs = await SharedPreferences.getInstance();
+    final int? last = prefs.getInt('last_download_page');
+    int tot = (last == null ? 1 : last);
+    _progress.value = tot;
+    for (int page = tot; page <= 604; page++) {
       if (cancelDownload) {
         break;
       }
@@ -135,6 +138,8 @@ class MainController extends GetxController {
         print("DDDDDD : " + data.toString());
         tot++;
         _progress.value += 1;
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt('last_download_page', tot);
         update();
       } on PlatformException catch (error) {
         print(error);
