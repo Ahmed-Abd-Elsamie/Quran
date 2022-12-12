@@ -14,7 +14,7 @@ class PageContent extends StatelessWidget {
   Widget build(BuildContext context) {
     String p = "";
     if (path == null) {
-      p = "/storage/emulated/0/Android/data/com.deksheno.quran/files/DekshenoQuran/" +
+      p = "/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/" +
           page.toString() +
           ".png";
     } else {
