@@ -88,6 +88,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/pages/
 
   fonts:
     - family: Tajawal

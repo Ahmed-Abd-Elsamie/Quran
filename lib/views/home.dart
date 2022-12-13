@@ -15,9 +15,7 @@ import 'package:quran/views/widget/page_content.dart';
 
 class Home extends GetWidget<MainController> {
   final _mainController = Get.put(MainController());
-  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
-
-  Map<int, String> justDownloaded = HashMap();
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
@@ -38,143 +36,23 @@ class Home extends GetWidget<MainController> {
                         : PageView.builder(
                             controller: _mainController.pageController,
                             onPageChanged: (value) {
-                              _mainController.checkLocal(value + 1);
                               _mainController.saveLastPage(value + 1);
                               _mainController.changeCurrentPage(value + 1);
                             },
                             itemCount: 604,
                             reverse: true,
                             itemBuilder: (context, index) => Obx(() {
-                              return _mainController.exist ==
-                                      true // check if page already downloaded
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        _mainController.changeBarState();
-                                      },
-                                      child: Container(
-                                          child: PageContent(
-                                        page: (_mainController.currentPage!),
-                                        dir: (((_mainController.currentPage!) %
-                                                2) ==
-                                            0),
-                                        path: justDownloaded[
-                                            _mainController.currentPage],
-                                      )),
-                                    )
-                                  : Container(
-                                      padding: EdgeInsets.only(top: 200),
-                                      child: Column(
-                                        children: [
-                                          TextButton(
-                                            style: ButtonStyle(
-                                                fixedSize:
-                                                    MaterialStateProperty.all(
-                                                        Size(150, 50)),
-                                                backgroundColor:
-                                                    MaterialStateProperty.all(
-                                                        Colors.brown)),
-                                            onPressed: () async {
-                                              showLoading();
-                                              String url =
-                                                  "https://www.searchtruth.org/quran/images8/" +
-                                                      (_mainController
-                                                              .currentPage)
-                                                          .toString() +
-                                                      ".png";
-                                              String? path =
-                                                  await _mainController
-                                                      .downloadImage(
-                                                          url,
-                                                          (_mainController
-                                                              .currentPage!));
-
-                                              if (path != "") {
-                                                print("Download Success");
-                                                _mainController.update();
-                                                _mainController.setExist();
-                                                justDownloaded[_mainController
-                                                    .currentPage!] = path!;
-                                                Phoenix.rebirth(context);
-                                              }
-                                              hideLoading();
-                                            },
-                                            child: Text(
-                                              "تحميل الصفحه",
-                                              style: TextStyle(
-                                                  fontSize: 20,
-                                                  color: Colors.white),
-                                            ),
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          GetBuilder<MainController>(
-                                            builder: (c){
-                                              return _mainController.showDownload.value ==
-                                                  true
-                                                  ? TextButton(
-                                                style: ButtonStyle(
-                                                    fixedSize:
-                                                    MaterialStateProperty
-                                                        .all(Size(
-                                                        200, 50)),
-                                                    backgroundColor:
-                                                    MaterialStateProperty
-                                                        .all(Colors
-                                                        .brown)),
-                                                onPressed: () async {
-                                                  _mainController
-                                                      .cancelDownloadAllImages();
-                                                  _mainController
-                                                      .setDownloadInVisible();
-                                                },
-                                                child: Text(
-                                                  "الغاء تحميل الصفحات",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              )
-                                                  : TextButton(
-                                                style: ButtonStyle(
-                                                    fixedSize:
-                                                    MaterialStateProperty
-                                                        .all(Size(
-                                                        200, 50)),
-                                                    backgroundColor:
-                                                    MaterialStateProperty
-                                                        .all(Colors
-                                                        .brown)),
-                                                onPressed: () async {
-                                                  toggleDrawer();
-                                                  _mainController
-                                                      .setDownloadVisible();
-                                                  //showLoading();
-                                                  bool state =
-                                                  await _mainController
-                                                      .downloadAllImages();
-                                                  if (state == true) {
-                                                    print(
-                                                        "all pages downloaded");
-                                                  } else {
-                                                    print(
-                                                        "failed to download all pages");
-                                                  }
-                                                  _mainController
-                                                      .setDownloadInVisible();
-                                                },
-                                                child: Text(
-                                                  "تحميل كل الصفحات",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              );
-                                            },
-                                          )
-                                        ],
-                                      ),
-                                    );
+                              return GestureDetector(
+                                onTap: () {
+                                  _mainController.changeBarState();
+                                },
+                                child: Container(
+                                    child: PageContent(
+                                  page: (_mainController.currentPage!),
+                                  dir: (((_mainController.currentPage!) % 2) ==
+                                      0),
+                                )),
+                              );
                             }),
                           );
                   }),
@@ -207,11 +85,17 @@ class Home extends GetWidget<MainController> {
                               ),
                             ),
                             TextButton.icon(
-                              onPressed: (){
+                              onPressed: () {
                                 Get.to(NotificationPage());
                               },
-                              icon: Icon(Icons.notifications, color: Colors.white,),
-                              label: Text("مقتطفات", style: TextStyle(color: Colors.white),),
+                              icon: Icon(
+                                Icons.notifications,
+                                color: Colors.white,
+                              ),
+                              label: Text(
+                                "مقتطفات",
+                                style: TextStyle(color: Colors.white),
+                              ),
                             ),
                             Obx(() {
                               return Text(
@@ -247,10 +131,7 @@ class Home extends GetWidget<MainController> {
                           children: [
                             TextButton.icon(
                               onPressed: () {
-                                // check if the current page already downloaded
-                                if (_mainController.exist!) {
-                                  _mainController.sharePage();
-                                }
+                                _mainController.sharePage();
                               },
                               label: Text(
                                 "مشاركه",
@@ -348,7 +229,6 @@ class Home extends GetWidget<MainController> {
                       if (data!.page == 0) {
                         return;
                       }
-                      _mainController.checkLocal(data.page);
                       _mainController.saveLastPage(data.page);
                       _mainController.changeSurah(data.page);
                     },
@@ -457,43 +337,9 @@ class Home extends GetWidget<MainController> {
                 SizedBox(
                   height: 20,
                 ),
-                _mainController.showDownload.value == true
-                    ? TextButton.icon(
-                        onPressed: () async {
-                          _mainController.cancelDownloadAllImages();
-                        },
-                        label: Text(
-                          "الغاء تحميل الصفحات",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                        icon: Icon(Icons.cancel_outlined),
-                      )
-                    : TextButton.icon(
-                        onPressed: () async {
-                          _mainController.setDownloadVisible();
-                          //showLoading();
-                          bool state =
-                              await _mainController.downloadAllImages();
-                          if (state == true) {
-                            print("all pages downloaded");
-                          } else {
-                            print("failed to download all pages");
-                          }
-                          _mainController.setDownloadInVisible();
-                          //hideLoading();
-                        },
-                        label: Text(
-                          "تحميل كل الصفحات",
-                          style: TextStyle(color: Colors.black, fontSize: 20),
-                        ),
-                        icon: Icon(Icons.download_outlined),
-                      ),
                 SizedBox(
                   height: 20,
                 ),
-                _mainController.showDownload.value == true
-                    ? downloadWidget()
-                    : Container()
               ],
             ),
           );
@@ -512,28 +358,6 @@ class Home extends GetWidget<MainController> {
 
   Future<void> gelLastPage() async {
     _mainController.getLastPage();
-  }
-
-  Widget downloadWidget() {
-    return GetBuilder<MainController>(
-      builder: (c) {
-        return Column(
-          children: [
-            CircularProgressIndicator(
-              strokeWidth: 7,
-              color: Colors.black,
-            ),
-            SizedBox(
-              height: 15,
-            ),
-            Text(
-              _mainController.progress.value.toString() + " / 604 الصفحات ",
-              style: TextStyle(color: Colors.black, fontSize: 22),
-            )
-          ],
-        );
-      },
-    );
   }
 
   void showLoading() {
