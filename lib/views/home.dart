@@ -148,10 +148,9 @@ class Home extends GetWidget<MainController> {
                                                         toggleDrawer();
                                                         _mainController
                                                             .setDownloadVisible();
-                                                        //showLoading();
                                                         bool state =
                                                             await _mainController
-                                                                .downloadAllImages();
+                                                                .downloadAllPages();
                                                         if (state == true) {
                                                           print(
                                                               "all pages downloaded");
@@ -483,16 +482,14 @@ class Home extends GetWidget<MainController> {
                     : TextButton.icon(
                         onPressed: () async {
                           _mainController.setDownloadVisible();
-                          //showLoading();
                           bool state =
-                              await _mainController.downloadAllImages();
+                              await _mainController.downloadAllPages();
                           if (state == true) {
                             print("all pages downloaded");
                           } else {
                             print("failed to download all pages");
                           }
                           _mainController.setDownloadInVisible();
-                          //hideLoading();
                         },
                         label: Text(
                           "تحميل كل الصفحات",

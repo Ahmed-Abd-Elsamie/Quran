@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/models/mark.dart';
@@ -145,16 +146,76 @@ class MainController extends GetxController {
       }
       if (await directory.exists()) {
         File savePage = File(directory.path + "/" + page.toString() + ".png");
-        dio.download(url, savePage.path,
-            onReceiveProgress: (downloaded, total) {
-
-            });
+        await dio.download(url, savePage.path,
+            onReceiveProgress: (downloaded, total) {});
         return directory.path;
       }
     } catch (e) {
       print(e);
     }
     return "";
+  }
+
+  Future<bool> downloadAllPages() async {
+    cancelDownload = false;
+    final prefs = await SharedPreferences.getInstance();
+    final int? last = prefs.getInt('last_download_page');
+    int tot = (last == null ? 1 : last);
+    _progress.value = tot;
+    Directory? directory;
+    try {
+      if (Platform.isAndroid) {
+        if (await _requestPermission(Permission.storage)) {
+          directory = await getExternalStorageDirectory();
+          directory = Directory(directory!.path + "/" + "QuranPages");
+          print("PATH ANDROID : " + directory.path);
+        } else {
+          return false;
+        }
+      } else {
+        print("IOS PLATFORM");
+        if (await _requestPermission(Permission.photos)) {
+          print("PERMISSION GRANTED");
+          directory = await getTemporaryDirectory();
+          print("PATH IOS : " + directory.path);
+          directory = Directory(directory.path + "/" + "QuranPages");
+          print("PATH IOS 2 : " + directory.path);
+        } else {
+          print("PERMISSION NOT GRANTED");
+          await _requestPermission(Permission.photos);
+          return false;
+        }
+      }
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (await directory.exists()) {
+        for (int page = tot; page <= 604; page++) {
+          if (cancelDownload) {
+            break;
+          }
+          NumberFormat formatter = new NumberFormat("0000");
+          int pageNum = (page + 3);
+          String pageNumUrl = formatter.format(pageNum);
+          String url = "https://www.searchtruth.org/quran/images4/" +
+              pageNumUrl +
+              ".jpg";
+
+          File savePage = File(directory.path + "/" + page.toString() + ".png");
+          await dio.download(url, savePage.path,
+              onReceiveProgress: (downloaded, total) {});
+          tot++;
+          _progress.value += 1;
+          final prefs = await SharedPreferences.getInstance();
+          await prefs.setInt('last_download_page', tot);
+          update();
+        }
+        return true;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return false;
   }
 
   Future<bool> _requestPermission(Permission permission) async {
@@ -172,47 +233,6 @@ class MainController extends GetxController {
 
   void cancelDownloadAllImages() {
     cancelDownload = true;
-  }
-
-  Future<bool> downloadAllImages() async {
-    cancelDownload = false;
-    final prefs = await SharedPreferences.getInstance();
-    final int? last = prefs.getInt('last_download_page');
-    int tot = (last == null ? 1 : last);
-    _progress.value = tot;
-    for (int page = tot; page <= 604; page++) {
-      if (cancelDownload) {
-        break;
-      }
-      try {
-        String url = "https://www.searchtruth.org/quran/images8/" +
-            page.toString() +
-            ".png";
-        var data = await ImageDownloader.downloadImage(
-          url,
-          destination: AndroidDestinationType.custom(directory: 'QuranPages')
-            ..inExternalFilesDir()
-            ..subDirectory(page.toString() + ".png"),
-        );
-
-        print("DDDDDD : " + data.toString());
-        tot++;
-        _progress.value += 1;
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('last_download_page', tot);
-        update();
-      } on PlatformException catch (error) {
-        print(error);
-        return false;
-      }
-    }
-    // reset value
-    //_progress.value = 0;
-    if (tot == 604) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
   void setExist() {
