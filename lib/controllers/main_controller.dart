@@ -1,9 +1,12 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:image_downloader/image_downloader.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/models/mark.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -41,6 +44,8 @@ class MainController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
 
   List<Mark> marksList = [];
+
+  final Dio dio = Dio();
 
   PageController pageController = PageController();
 
@@ -107,6 +112,57 @@ class MainController extends GetxController {
     } on PlatformException catch (error) {
       print(error);
       return "";
+    }
+  }
+
+  Future<String> downloadPage(String url, int page) async {
+    Directory? directory;
+    try {
+      if (Platform.isAndroid) {
+        if (await _requestPermission(Permission.storage)) {
+          directory = await getExternalStorageDirectory();
+          directory = Directory(directory!.path + "/" + "QuranPages");
+          print("PATH ANDROID : " + directory.path);
+        } else {
+          return "";
+        }
+      } else {
+        if (await _requestPermission(Permission.photos)) {
+          directory = await getTemporaryDirectory();
+          print("PATH IOS : " + directory.path);
+          directory = Directory(directory.path + "/" + "QuranPages");
+          print("PATH IOS 2 : " + directory.path);
+        } else {
+          return "";
+        }
+      }
+      if (!await directory.exists()) {
+        await directory.create(recursive: true);
+      }
+      if (await directory.exists()) {
+        File savePage = File(directory.path + "/" + page.toString() + ".png");
+        dio.download(url, savePage.path,
+            onReceiveProgress: (downloaded, total) {
+
+            });
+        return directory.path;
+      }
+    } catch (e) {
+      print(e);
+    }
+    return "";
+  }
+
+  Future<bool> _requestPermission(Permission permission) async {
+    if (await permission.isGranted) {
+      return true;
+    } else {
+      var result = await permission.request();
+      if (result == PermissionStatus.granted) {
+        return true;
+      } else {
+        return false;
+      }
     }
   }
 

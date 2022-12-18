@@ -1,9 +1,7 @@
-import 'dart:collection';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/controllers/main_controller.dart';
 import 'package:quran/models/part.dart';
@@ -17,7 +15,7 @@ class Home extends GetWidget<MainController> {
   final _mainController = Get.put(MainController());
   GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  Map<int, String> justDownloaded = HashMap();
+  Map<int, String> downloadedPages = {};
 
   @override
   Widget build(BuildContext context) {
@@ -51,15 +49,10 @@ class Home extends GetWidget<MainController> {
                                       onTap: () {
                                         _mainController.changeBarState();
                                       },
-                                      child: Container(
-                                          child: PageContent(
-                                        page: (_mainController.currentPage!),
-                                        dir: (((_mainController.currentPage!) %
-                                                2) ==
-                                            0),
-                                        path: justDownloaded[
-                                            _mainController.currentPage],
-                                      )),
+                                      child: PageContent(
+                                        page: index + 1,
+                                        url: downloadedPages[index + 1],
+                                      ),
                                     )
                                   : Container(
                                       padding: EdgeInsets.only(top: 200),
@@ -75,26 +68,28 @@ class Home extends GetWidget<MainController> {
                                                         Colors.brown)),
                                             onPressed: () async {
                                               showLoading();
+                                              NumberFormat formatter =
+                                                  new NumberFormat("0000");
+                                              int pageNum = (_mainController
+                                                      .currentPage! +
+                                                  3);
+                                              String pageNumUrl =
+                                                  formatter.format(pageNum);
                                               String url =
-                                                  "https://www.searchtruth.org/quran/images8/" +
-                                                      (_mainController
-                                                              .currentPage)
-                                                          .toString() +
-                                                      ".png";
-                                              String? path =
+                                                  "https://www.searchtruth.org/quran/images4/" +
+                                                      pageNumUrl +
+                                                      ".jpg";
+                                              String downloadPath =
                                                   await _mainController
-                                                      .downloadImage(
+                                                      .downloadPage(
                                                           url,
-                                                          (_mainController
-                                                              .currentPage!));
-
-                                              if (path != "") {
+                                                          _mainController
+                                                              .currentPage!);
+                                              if (downloadPath != "") {
                                                 print("Download Success");
-                                                _mainController.update();
+                                                downloadedPages[_mainController
+                                                    .currentPage!] = url;
                                                 _mainController.setExist();
-                                                justDownloaded[_mainController
-                                                    .currentPage!] = path!;
-                                                Phoenix.rebirth(context);
                                               }
                                               hideLoading();
                                             },
@@ -109,67 +104,70 @@ class Home extends GetWidget<MainController> {
                                             height: 10,
                                           ),
                                           GetBuilder<MainController>(
-                                            builder: (c){
-                                              return _mainController.showDownload.value ==
-                                                  true
+                                            builder: (c) {
+                                              return _mainController
+                                                          .showDownload.value ==
+                                                      true
                                                   ? TextButton(
-                                                style: ButtonStyle(
-                                                    fixedSize:
-                                                    MaterialStateProperty
-                                                        .all(Size(
-                                                        200, 50)),
-                                                    backgroundColor:
-                                                    MaterialStateProperty
-                                                        .all(Colors
-                                                        .brown)),
-                                                onPressed: () async {
-                                                  _mainController
-                                                      .cancelDownloadAllImages();
-                                                  _mainController
-                                                      .setDownloadInVisible();
-                                                },
-                                                child: Text(
-                                                  "الغاء تحميل الصفحات",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              )
+                                                      style: ButtonStyle(
+                                                          fixedSize:
+                                                              MaterialStateProperty
+                                                                  .all(Size(
+                                                                      200, 50)),
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(Colors
+                                                                      .brown)),
+                                                      onPressed: () async {
+                                                        _mainController
+                                                            .cancelDownloadAllImages();
+                                                        _mainController
+                                                            .setDownloadInVisible();
+                                                      },
+                                                      child: Text(
+                                                        "الغاء تحميل الصفحات",
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    )
                                                   : TextButton(
-                                                style: ButtonStyle(
-                                                    fixedSize:
-                                                    MaterialStateProperty
-                                                        .all(Size(
-                                                        200, 50)),
-                                                    backgroundColor:
-                                                    MaterialStateProperty
-                                                        .all(Colors
-                                                        .brown)),
-                                                onPressed: () async {
-                                                  toggleDrawer();
-                                                  _mainController
-                                                      .setDownloadVisible();
-                                                  //showLoading();
-                                                  bool state =
-                                                  await _mainController
-                                                      .downloadAllImages();
-                                                  if (state == true) {
-                                                    print(
-                                                        "all pages downloaded");
-                                                  } else {
-                                                    print(
-                                                        "failed to download all pages");
-                                                  }
-                                                  _mainController
-                                                      .setDownloadInVisible();
-                                                },
-                                                child: Text(
-                                                  "تحميل كل الصفحات",
-                                                  style: TextStyle(
-                                                      fontSize: 20,
-                                                      color: Colors.white),
-                                                ),
-                                              );
+                                                      style: ButtonStyle(
+                                                          fixedSize:
+                                                              MaterialStateProperty
+                                                                  .all(Size(
+                                                                      200, 50)),
+                                                          backgroundColor:
+                                                              MaterialStateProperty
+                                                                  .all(Colors
+                                                                      .brown)),
+                                                      onPressed: () async {
+                                                        toggleDrawer();
+                                                        _mainController
+                                                            .setDownloadVisible();
+                                                        //showLoading();
+                                                        bool state =
+                                                            await _mainController
+                                                                .downloadAllImages();
+                                                        if (state == true) {
+                                                          print(
+                                                              "all pages downloaded");
+                                                        } else {
+                                                          print(
+                                                              "failed to download all pages");
+                                                        }
+                                                        _mainController
+                                                            .setDownloadInVisible();
+                                                      },
+                                                      child: Text(
+                                                        "تحميل كل الصفحات",
+                                                        style: TextStyle(
+                                                            fontSize: 20,
+                                                            color:
+                                                                Colors.white),
+                                                      ),
+                                                    );
                                             },
                                           )
                                         ],
@@ -183,136 +181,148 @@ class Home extends GetWidget<MainController> {
             ),
           ),
           // upper bar
-          GetBuilder<MainController>(
-            builder: (MainController c) {
-              return _mainController.barState.value == true
-                  ? Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        alignment: Alignment.center,
-                        color: Colors.brown,
-                        padding: EdgeInsets.only(top: 25, right: 25),
-                        height: 100,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                toggleDrawer();
-                              },
-                              icon: Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: (){
-                                Get.to(NotificationPage());
-                              },
-                              icon: Icon(Icons.notifications, color: Colors.white,),
-                              label: Text("مقتطفات", style: TextStyle(color: Colors.white),),
-                            ),
-                            Obx(() {
-                              return Text(
-                                surahList
-                                    .where((element) =>
-                                        element.page <=
-                                        _mainController.currentPage!)
-                                    .toList()
-                                    .last
-                                    .name,
-                                style: TextStyle(color: Colors.white),
-                              );
-                            })
-                          ],
-                        ),
-                      ),
-                    )
-                  : Container();
-            },
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black45, spreadRadius: 5, blurRadius: 5)
+                ],
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20)),
+              ),
+              padding: EdgeInsets.only(top: 25, right: 25),
+              height: 105,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      toggleDrawer();
+                    },
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      Get.to(NotificationPage());
+                    },
+                    icon: Icon(
+                      Icons.notifications,
+                      color: Colors.brown,
+                    ),
+                    label: Text(
+                      "مقتطفات",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                  ),
+                  Obx(() {
+                    return _mainController.currentPage == null
+                        ? CircularProgressIndicator()
+                        : Text(
+                            surahList
+                                .where((element) =>
+                                    element.page <=
+                                    _mainController.currentPage!)
+                                .toList()
+                                .last
+                                .name,
+                            style: TextStyle(color: Colors.brown),
+                          );
+                  })
+                ],
+              ),
+            ),
           ),
           // lower bar
-          GetBuilder<MainController>(
-            builder: (MainController c) {
-              return _mainController.barState.value == true
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        color: Colors.brown,
-                        height: 100,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                // check if the current page already downloaded
-                                if (_mainController.exist!) {
-                                  _mainController.sharePage();
-                                }
-                              },
-                              label: Text(
-                                "مشاركه",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.share,
-                                color: Colors.white,
-                              ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black45, spreadRadius: 5, blurRadius: 5)
+                ],
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(20)),
+              ),
+              height: 70,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      // check if the current page already downloaded
+                      if (_mainController.exist!) {
+                        _mainController.sharePage();
+                      }
+                    },
+                    label: Text(
+                      "مشاركه",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    icon: Icon(
+                      Icons.share,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      showMaterialModalBottomSheet(
+                        context: context,
+                        builder: (context) => SingleChildScrollView(
+                          controller: ModalScrollController.of(context),
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            height: 200,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "قريبا ان شاء الله في الاصدارات القادمه",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20),
+                                ),
+                              ],
                             ),
-                            TextButton.icon(
-                              onPressed: () {
-                                showMaterialModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => SingleChildScrollView(
-                                    controller:
-                                        ModalScrollController.of(context),
-                                    child: Container(
-                                      padding: EdgeInsets.all(15),
-                                      height: 200,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "قريبا ان شاء الله في الاصدارات القادمه",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              label: Text(
-                                "تفسير",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.chat,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: () {
-                                _mainController.addToMarks();
-                              },
-                              label: Text(
-                                "علامه",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.bookmark_remove_outlined,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    )
-                  : Container();
-            },
+                      );
+                    },
+                    label: Text(
+                      "تفسير",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    icon: Icon(
+                      Icons.chat,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      _mainController.addToMarks();
+                    },
+                    label: Text(
+                      "علامه",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    icon: Icon(
+                      Icons.bookmark_remove_outlined,
+                      color: Colors.brown,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
