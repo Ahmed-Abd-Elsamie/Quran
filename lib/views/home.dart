@@ -90,6 +90,8 @@ class Home extends GetWidget<MainController> {
                                                 downloadedPages[_mainController
                                                     .currentPage!] = url;
                                                 _mainController.setExist();
+                                              }else {
+                                                print("NOT Downloaded");
                                               }
                                               hideLoading();
                                             },

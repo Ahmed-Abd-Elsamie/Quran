@@ -127,12 +127,16 @@ class MainController extends GetxController {
           return "";
         }
       } else {
+        print("IOS PLATFORM");
         if (await _requestPermission(Permission.photos)) {
+          print("PERMISSION GRANTED");
           directory = await getTemporaryDirectory();
           print("PATH IOS : " + directory.path);
           directory = Directory(directory.path + "/" + "QuranPages");
           print("PATH IOS 2 : " + directory.path);
         } else {
+          print("PERMISSION NOT GRANTED");
+          await _requestPermission(Permission.photos);
           return "";
         }
       }
