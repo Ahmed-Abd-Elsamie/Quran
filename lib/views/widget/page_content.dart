@@ -11,7 +11,7 @@ class PageContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String path =
-        "/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/" +
+        "/data/user/0/com.deksheno.quran/app_flutter/QuranPages/" +
             page.toString() +
             ".png";
 

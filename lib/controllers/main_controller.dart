@@ -93,7 +93,7 @@ class MainController extends GetxController {
 
   File _getLocalFile(int page) {
     File file = new File(
-        '/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/' +
+        '/data/user/0/com.deksheno.quran/app_flutter/QuranPages/' +
             page.toString() +
             '.png');
     return file;
@@ -121,8 +121,8 @@ class MainController extends GetxController {
     try {
       if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage)) {
-          directory = await getExternalStorageDirectory();
-          directory = Directory(directory!.path + "/" + "QuranPages");
+          directory = await getApplicationDocumentsDirectory();
+          directory = Directory(directory.path + "/" + "QuranPages");
           print("PATH ANDROID : " + directory.path);
         } else {
           return "";
@@ -131,7 +131,7 @@ class MainController extends GetxController {
         print("IOS PLATFORM");
         if (await _requestPermission(Permission.photos)) {
           print("PERMISSION GRANTED");
-          directory = await getTemporaryDirectory();
+          directory = await getApplicationDocumentsDirectory();
           print("PATH IOS : " + directory.path);
           directory = Directory(directory.path + "/" + "QuranPages");
           print("PATH IOS 2 : " + directory.path);
@@ -166,8 +166,8 @@ class MainController extends GetxController {
     try {
       if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage)) {
-          directory = await getExternalStorageDirectory();
-          directory = Directory(directory!.path + "/" + "QuranPages");
+          directory = await getApplicationDocumentsDirectory();
+          directory = Directory(directory.path + "/" + "QuranPages");
           print("PATH ANDROID : " + directory.path);
         } else {
           return false;
@@ -176,7 +176,7 @@ class MainController extends GetxController {
         print("IOS PLATFORM");
         if (await _requestPermission(Permission.photos)) {
           print("PERMISSION GRANTED");
-          directory = await getTemporaryDirectory();
+          directory = await getApplicationDocumentsDirectory();
           print("PATH IOS : " + directory.path);
           directory = Directory(directory.path + "/" + "QuranPages");
           print("PATH IOS 2 : " + directory.path);
