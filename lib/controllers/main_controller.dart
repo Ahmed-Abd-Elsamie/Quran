@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
@@ -34,8 +33,6 @@ class MainController extends GetxController {
   ValueNotifier<bool> get loading => _loading;
 
   List<Mark> marksList = [];
-
-  final Dio dio = Dio();
 
   PageController pageController = PageController();
 

@@ -3,7 +3,6 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:quran/utils/constants.dart';
 import 'package:quran/views/home.dart';
@@ -57,7 +56,7 @@ class MyApp extends StatelessWidget {
         splash: 'assets/images/logo.png',
         duration: 5,
         screenFunction: () async {
-          return Phoenix(child: Home());
+          return Home();
         },
         splashIconSize: 200,
         splashTransition: SplashTransition.fadeTransition,
@@ -68,13 +67,12 @@ class MyApp extends StatelessWidget {
 
 Future<void> _onMessageReceived(RemoteMessage message) async {
   AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: DateTime.now().millisecond,
-          channelKey: 'basic_channel',
-          color: Colors.brown,
-          title: message.data['title'],
-          body: message.data['body'],
-          icon: "asset://assets/images/logo.png"
-      ),
+    content: NotificationContent(
+        id: DateTime.now().millisecond,
+        channelKey: 'basic_channel',
+        color: Colors.brown,
+        title: message.data['title'],
+        body: message.data['body'],
+        icon: "asset://assets/images/logo.png"),
   );
 }
