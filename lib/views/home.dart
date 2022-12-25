@@ -1,8 +1,5 @@
-import 'dart:collection';
-
 import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/controllers/main_controller.dart';
@@ -15,7 +12,9 @@ import 'package:quran/views/widget/page_content.dart';
 
 class Home extends GetWidget<MainController> {
   final _mainController = Get.put(MainController());
-  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+  GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  Map<int, String> downloadedPages = {};
 
   @override
   Widget build(BuildContext context) {
@@ -41,19 +40,11 @@ class Home extends GetWidget<MainController> {
                             },
                             itemCount: 604,
                             reverse: true,
-                            itemBuilder: (context, index) => Obx(() {
-                              return GestureDetector(
-                                onTap: () {
-                                  _mainController.changeBarState();
-                                },
-                                child: Container(
-                                    child: PageContent(
-                                  page: (_mainController.currentPage!),
-                                  dir: (((_mainController.currentPage!) % 2) ==
-                                      0),
-                                )),
+                            itemBuilder: (context, index) {
+                              return PageContent(
+                                page: index + 1,
                               );
-                            }),
+                            },
                           );
                   }),
                 ),
@@ -61,139 +52,145 @@ class Home extends GetWidget<MainController> {
             ),
           ),
           // upper bar
-          GetBuilder<MainController>(
-            builder: (MainController c) {
-              return _mainController.barState.value == true
-                  ? Align(
-                      alignment: Alignment.topCenter,
-                      child: Container(
-                        alignment: Alignment.center,
-                        color: Colors.brown,
-                        padding: EdgeInsets.only(top: 25, right: 25),
-                        height: 100,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            IconButton(
-                              onPressed: () {
-                                toggleDrawer();
-                              },
-                              icon: Icon(
-                                Icons.menu,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: () {
-                                Get.to(NotificationPage());
-                              },
-                              icon: Icon(
-                                Icons.notifications,
-                                color: Colors.white,
-                              ),
-                              label: Text(
-                                "مقتطفات",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                            ),
-                            Obx(() {
-                              return Text(
-                                surahList
-                                    .where((element) =>
-                                        element.page <=
-                                        _mainController.currentPage!)
-                                    .toList()
-                                    .last
-                                    .name,
-                                style: TextStyle(color: Colors.white),
-                              );
-                            })
-                          ],
-                        ),
-                      ),
-                    )
-                  : Container();
-            },
+          Align(
+            alignment: Alignment.topCenter,
+            child: Container(
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black45, spreadRadius: 5, blurRadius: 5)
+                ],
+                borderRadius: BorderRadius.only(
+                    bottomRight: Radius.circular(20),
+                    bottomLeft: Radius.circular(20)),
+              ),
+              padding: EdgeInsets.only(top: 25, right: 25),
+              height: 105,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      toggleDrawer();
+                    },
+                    icon: Icon(
+                      Icons.menu,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      Get.to(NotificationPage());
+                    },
+                    icon: Icon(
+                      Icons.notifications,
+                      color: Colors.brown,
+                    ),
+                    label: Text(
+                      "مقتطفات",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                  ),
+                  Obx(() {
+                    return _mainController.currentPage == null
+                        ? CircularProgressIndicator()
+                        : Text(
+                            surahList
+                                .where((element) =>
+                                    element.page <=
+                                    _mainController.currentPage!)
+                                .toList()
+                                .last
+                                .name,
+                            style: TextStyle(color: Colors.brown),
+                          );
+                  })
+                ],
+              ),
+            ),
           ),
           // lower bar
-          GetBuilder<MainController>(
-            builder: (MainController c) {
-              return _mainController.barState.value == true
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: Container(
-                        color: Colors.brown,
-                        height: 100,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            TextButton.icon(
-                              onPressed: () {
-                                _mainController.sharePage();
-                              },
-                              label: Text(
-                                "مشاركه",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.share,
-                                color: Colors.white,
-                              ),
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black45, spreadRadius: 5, blurRadius: 5)
+                ],
+                borderRadius: BorderRadius.only(
+                    topRight: Radius.circular(20),
+                    topLeft: Radius.circular(20)),
+              ),
+              height: 70,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  TextButton.icon(
+                    onPressed: () {
+                      _mainController.sharePage(context);
+                    },
+                    label: Text(
+                      "مشاركه",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    icon: Icon(
+                      Icons.share,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      showMaterialModalBottomSheet(
+                        context: context,
+                        builder: (context) => SingleChildScrollView(
+                          controller: ModalScrollController.of(context),
+                          child: Container(
+                            padding: EdgeInsets.all(15),
+                            height: 200,
+                            child: Column(
+                              children: [
+                                Text(
+                                  "قريبا ان شاء الله في الاصدارات القادمه",
+                                  style: TextStyle(
+                                      color: Colors.black, fontSize: 20),
+                                ),
+                              ],
                             ),
-                            TextButton.icon(
-                              onPressed: () {
-                                showMaterialModalBottomSheet(
-                                  context: context,
-                                  builder: (context) => SingleChildScrollView(
-                                    controller:
-                                        ModalScrollController.of(context),
-                                    child: Container(
-                                      padding: EdgeInsets.all(15),
-                                      height: 200,
-                                      child: Column(
-                                        children: [
-                                          Text(
-                                            "قريبا ان شاء الله في الاصدارات القادمه",
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontSize: 20),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              label: Text(
-                                "تفسير",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.chat,
-                                color: Colors.white,
-                              ),
-                            ),
-                            TextButton.icon(
-                              onPressed: () {
-                                _mainController.addToMarks();
-                              },
-                              label: Text(
-                                "علامه",
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              icon: Icon(
-                                Icons.bookmark_remove_outlined,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                      ),
-                    )
-                  : Container();
-            },
+                      );
+                    },
+                    label: Text(
+                      "تفسير",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    icon: Icon(
+                      Icons.chat,
+                      color: Colors.brown,
+                    ),
+                  ),
+                  TextButton.icon(
+                    onPressed: () {
+                      _mainController.addToMarks();
+                    },
+                    label: Text(
+                      "علامه",
+                      style: TextStyle(color: Colors.brown),
+                    ),
+                    icon: Icon(
+                      Icons.bookmark_remove_outlined,
+                      color: Colors.brown,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
         ],
       ),
@@ -334,12 +331,6 @@ class Home extends GetWidget<MainController> {
                   endIndent: 10,
                   indent: 10,
                 ),
-                SizedBox(
-                  height: 20,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
               ],
             ),
           );
@@ -358,6 +349,28 @@ class Home extends GetWidget<MainController> {
 
   Future<void> gelLastPage() async {
     _mainController.getLastPage();
+  }
+
+  Widget downloadWidget() {
+    return GetBuilder<MainController>(
+      builder: (c) {
+        return Column(
+          children: [
+            CircularProgressIndicator(
+              strokeWidth: 7,
+              color: Colors.black,
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            Text(
+              _mainController.progress.value.toString() + " / 604 الصفحات ",
+              style: TextStyle(color: Colors.black, fontSize: 22),
+            )
+          ],
+        );
+      },
+    );
   }
 
   void showLoading() {

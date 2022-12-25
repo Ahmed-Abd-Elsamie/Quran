@@ -1,7 +1,8 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/models/mark.dart';
-import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../db_helper/database_helper.dart';
@@ -14,15 +15,27 @@ class MainController extends GetxController {
 
   ValueNotifier<bool> get barState => _barState;
 
+  ValueNotifier<int> _progress = ValueNotifier(0);
+
+  ValueNotifier<int> get progress => _progress;
+
+  ValueNotifier<bool> _showDownload = ValueNotifier(false);
+
+  ValueNotifier<bool> get showDownload => _showDownload;
+
   Rx<int?> _currentPage = Rxn<int>();
 
   int? get currentPage => _currentPage.value;
+
+  bool cancelDownload = false;
 
   final ValueNotifier<bool> _loading = ValueNotifier(false);
 
   ValueNotifier<bool> get loading => _loading;
 
   List<Mark> marksList = [];
+
+  final Dio dio = Dio();
 
   PageController pageController = PageController();
 
@@ -61,9 +74,25 @@ class MainController extends GetxController {
     pageController.jumpToPage(page - 1);
   }
 
-  Future<void> sharePage() async {
-    Share.shareFiles(['assets/pages/' + _currentPage.value.toString() + '.png'], text: 'ورد اليوم');
-    //Share.shareXFiles([XFile('assets/pages/1.png')], text: 'ورد اليوم');
+  void sharePage(BuildContext context) {
+    showMaterialModalBottomSheet(
+      context: context,
+      builder: (context) => SingleChildScrollView(
+        controller: ModalScrollController.of(context),
+        child: Container(
+          padding: EdgeInsets.all(15),
+          height: 200,
+          child: Column(
+            children: [
+              Text(
+                "قريبا ان شاء الله في الاصدارات القادمه",
+                style: TextStyle(color: Colors.black, fontSize: 20),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> addToMarks() async {
@@ -129,6 +158,7 @@ class MainController extends GetxController {
 
   Future<void> getAllMarks() async {
     _loading.value = true;
+    //update();
     marksList = (await dbHelper.getAllMarks())!;
     marksList = marksList.reversed.toList();
     _loading.value = false;
