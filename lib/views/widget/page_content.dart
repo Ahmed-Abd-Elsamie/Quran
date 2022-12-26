@@ -22,7 +22,7 @@ class PageContent extends StatelessWidget {
           child: ClipRRect(
             clipBehavior: Clip.hardEdge,
             borderRadius: BorderRadius.circular(45),
-            child: Image.asset("assets/pages/${page.toString()}.png",
+            child: Image.asset("assets/pages/${page.toString()}.jpg",
                 width: 100, height: 100),
           ),
         ),
