@@ -3,14 +3,17 @@ import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:get/get.dart';
 import 'package:quran/utils/constants.dart';
 import 'package:quran/views/home.dart';
+import 'package:quran/firebase_options.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
 
   AwesomeNotifications().isNotificationAllowed().then((isAllowed) {
     if (!isAllowed) {
@@ -31,7 +34,7 @@ Future<void> main() async {
       ],
       channelGroups: [
         NotificationChannelGroup(
-            channelGroupkey: 'basic_channel_group',
+            channelGroupKey: 'basic_channel_group',
             channelGroupName: 'Basic group')
       ],
       debug: true);
@@ -57,7 +60,7 @@ class MyApp extends StatelessWidget {
         splash: 'assets/images/logo.png',
         duration: 5,
         screenFunction: () async {
-          return Phoenix(child: Home());
+          return Home();
         },
         splashIconSize: 200,
         splashTransition: SplashTransition.fadeTransition,

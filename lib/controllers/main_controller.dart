@@ -1,17 +1,13 @@
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:image_downloader/image_downloader.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:quran/models/mark.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../db_helper/database_helper.dart';
 import '../utils/constants.dart';
 
@@ -97,23 +93,6 @@ class MainController extends GetxController {
             page.toString() +
             '.png');
     return file;
-  }
-
-  Future<String?> downloadImage(String url, int page) async {
-    try {
-      var data = await ImageDownloader.downloadImage(
-        url,
-        destination: AndroidDestinationType.custom(directory: 'QuranPages')
-          ..inExternalFilesDir()
-          ..subDirectory(page.toString() + ".png"),
-      );
-      var path = await ImageDownloader.findPath(data!);
-      print("DDDDDD : " + path.toString());
-      return path;
-    } on PlatformException catch (error) {
-      print(error);
-      return "";
-    }
   }
 
   Future<String> downloadPage(String url, int page) async {
