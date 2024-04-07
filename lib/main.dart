@@ -8,7 +8,6 @@ import 'package:quran/utils/constants.dart';
 import 'package:quran/views/home.dart';
 import 'package:quran/firebase_options.dart';
 
-
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -55,7 +54,11 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Quran - قران',
-      theme: ThemeData(primarySwatch: primaryColor, fontFamily: "Tajawal"),
+      theme: ThemeData(
+        primarySwatch: primaryColor,
+        fontFamily: "Tajawal",
+        colorScheme: ColorScheme.fromSeed(seedColor: primaryColor),
+      ),
       home: AnimatedSplashScreen.withScreenFunction(
         splash: 'assets/images/logo.png',
         duration: 5,
@@ -71,13 +74,12 @@ class MyApp extends StatelessWidget {
 
 Future<void> _onMessageReceived(RemoteMessage message) async {
   AwesomeNotifications().createNotification(
-      content: NotificationContent(
-          id: DateTime.now().millisecond,
-          channelKey: 'basic_channel',
-          color: Colors.brown,
-          title: message.data['title'],
-          body: message.data['body'],
-          icon: "asset://assets/images/logo.png"
-      ),
+    content: NotificationContent(
+        id: DateTime.now().millisecond,
+        channelKey: 'basic_channel',
+        color: Colors.brown,
+        title: message.data['title'],
+        body: message.data['body'],
+        icon: "asset://assets/images/logo.png"),
   );
 }
