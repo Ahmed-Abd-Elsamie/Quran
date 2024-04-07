@@ -40,9 +40,7 @@ class NotificationPage extends StatelessWidget {
                                         borderRadius:
                                             BorderRadius.circular(5.0),
                                       ))),
-                                  onPressed: () {
-
-                                  },
+                                  onPressed: () {},
                                   child: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -88,7 +86,6 @@ class NotificationPage extends StatelessWidget {
                                       ),
                                     ],
                                   )),
-
                             ],
                           ),
                         );
