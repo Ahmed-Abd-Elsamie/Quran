@@ -1,24 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran/controllers/main_controller.dart';
+import 'package:quran/controllers/mark_controller.dart';
 
 class SavedMarks extends StatelessWidget {
   final _mainController = Get.put(MainController());
+  final _marksController = Get.put(MarksController());
 
   @override
   Widget build(BuildContext context) {
-    _mainController.getAllMarks();
+    _marksController.getAllMarks();
     return Scaffold(
       appBar: AppBar(
         title: Text("العلامات المرجعيه"),
       ),
       body: Center(
-        child: GetBuilder<MainController>(
+        child: GetBuilder<MarksController>(
           builder: (c) {
-            return _mainController.loading.value
+            return _marksController.loading.value
                 ? CircularProgressIndicator()
                 : ListView.builder(
-                    itemCount: _mainController.marksList.length,
+                    itemCount: _marksController.marksList.length,
                     itemBuilder: (ctx, index) {
                       return Container(
                         margin: EdgeInsets.all(5),
@@ -35,20 +37,25 @@ class SavedMarks extends StatelessWidget {
                                   borderRadius: BorderRadius.circular(10.0),
                                 ))),
                             onPressed: () {
-                              print(_mainController.marksList[index].type.toString());
+                              print(_marksController.marksList[index].type
+                                  .toString());
                               _mainController.changeSurah(
-                                  _mainController.marksList[index].page_num);
+                                  _marksController.marksList[index].page_num);
                               Get.back();
                             },
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 TextButton.icon(
-                                  onPressed: (){
-                                    _mainController.deleteMark(_mainController.marksList[index].id);
+                                  onPressed: () {
+                                    _marksController.deleteMark(
+                                        _marksController.marksList[index].id);
                                   },
                                   label: Text("حذف العلامه"),
-                                  icon: Icon(Icons.delete_forever, color: Colors.brown,),
+                                  icon: Icon(
+                                    Icons.delete_forever,
+                                    color: Colors.brown,
+                                  ),
                                 ),
                                 new Expanded(
                                   child: new Padding(
@@ -59,8 +66,8 @@ class SavedMarks extends StatelessWidget {
                                           CrossAxisAlignment.end,
                                       children: <Widget>[
                                         new Text(
-                                          _mainController
-                                                  .marksList[index].surah,
+                                          _marksController
+                                              .marksList[index].surah,
                                           textDirection: TextDirection.rtl,
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
@@ -71,16 +78,18 @@ class SavedMarks extends StatelessWidget {
                                                 top: 5.0)),
                                         new Text(
                                             " صفحه رقم " +
-                                            _mainController
-                                                .marksList[index].page_num
-                                                .toString(),
+                                                _marksController
+                                                    .marksList[index].page_num
+                                                    .toString(),
                                             textAlign: TextAlign.end,
                                             textDirection: TextDirection.ltr,
                                             style: TextStyle(fontSize: 17)),
                                         new Text(
-                                            _mainController
-                                                .marksList[index].type == 1 ? "علامه القراءه" : "علامه الحفظ"
-                                                .toString(),
+                                            _marksController.marksList[index]
+                                                        .type ==
+                                                    1
+                                                ? "علامه القراءه"
+                                                : "علامه الحفظ".toString(),
                                             textAlign: TextAlign.end,
                                             textDirection: TextDirection.ltr,
                                             style: TextStyle(fontSize: 17)),

@@ -5,42 +5,24 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:quran/models/mark.dart';
+import 'package:quran/utils/app_helper.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../db_helper/database_helper.dart';
 import '../utils/constants.dart';
 
 class MainController extends GetxController {
-  final dbHelper = DatabaseHelper.instance;
-
-  Rx<bool?> _exist = Rxn<bool>();
-
-  bool? get exist => _exist.value;
-
-  ValueNotifier<bool> _barState = ValueNotifier(true);
-
-  ValueNotifier<bool> get barState => _barState;
 
   ValueNotifier<int> _progress = ValueNotifier(0);
 
   ValueNotifier<int> get progress => _progress;
 
-  ValueNotifier<bool> _showDownload = ValueNotifier(false);
+  RxBool showDownload = false.obs;
 
-  ValueNotifier<bool> get showDownload => _showDownload;
+  RxInt currentPage = 1.obs;
 
-  Rx<int?> _currentPage = Rxn<int>();
-
-  int? get currentPage => _currentPage.value;
+  RxBool isLoadingLastPage = false.obs;
 
   bool cancelDownload = false;
-
-  final ValueNotifier<bool> _loading = ValueNotifier(false);
-
-  ValueNotifier<bool> get loading => _loading;
-
-  List<Mark> marksList = [];
 
   final Dio dio = Dio();
 
@@ -49,63 +31,36 @@ class MainController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    _exist.value = false;
-    _exist.bindStream(exist.obs.stream);
-    _currentPage.bindStream(currentPage.obs.stream);
-  }
-
-  MainController() {}
-
-  MainController.page(int page) {
-    _exist.bindStream(exist.obs.stream);
-    _exist.value = false;
-    checkLocal(page);
+    getLastPage();
   }
 
   void getLastPage() async {
+    isLoadingLastPage.value = true;
     final prefs = await SharedPreferences.getInstance();
     final int? page = prefs.getInt('last_page');
-    print("PPPP" + page.toString());
-    _currentPage.value = (page == null ? 1 : page);
-    pageController = PageController(initialPage: _currentPage.value! - 1);
-    checkLocal(_currentPage.value!);
+    print("LAST PAGE : " + page.toString());
+    currentPage.value = (page == null ? 1 : page);
+    pageController = PageController(initialPage: currentPage.value - 1);
+    isLoadingLastPage.value = false;
   }
 
   Future<void> saveLastPage(int page) async {
     final prefs = await SharedPreferences.getInstance();
-    print("PPPP" + page.toString());
+    print("SAVE LOCAL PAGE : " + page.toString());
     await prefs.setInt('last_page', page);
   }
 
-  void checkLocal(int page) async {
-    var f = _getLocalFile(page);
-    var e = await f.exists();
-    if (e) {
-      _exist.value = true;
-    } else {
-      _exist.value = false;
-    }
-  }
-
-  File _getLocalFile(int page) {
-    File file = new File(
-        '/data/user/0/com.deksheno.quran/app_flutter/QuranPages/' +
-            page.toString() +
-            '.png');
-    return file;
-  }
-
-  Future<String> downloadPage(String url, int page) async {
+  Future<void> downloadPage(int page) async {
+    AppHelper.showLoading();
+    String downloadUrl = _getDownloadUrl(page);
     Directory? directory;
     try {
       if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage)) {
           directory = await getApplicationDocumentsDirectory();
-          directory = Directory(directory.path + "/" + "QuranPages");
+          directory = Directory('${directory.path}/$localFolder');
           print("PATH ANDROID : " + directory.path);
-        } else {
-          return "";
-        }
+        } else {}
       } else {
         print("IOS PLATFORM");
         if (await _requestPermission(Permission.photos)) {
@@ -117,22 +72,21 @@ class MainController extends GetxController {
         } else {
           print("PERMISSION NOT GRANTED");
           await _requestPermission(Permission.photos);
-          return "";
         }
       }
-      if (!await directory.exists()) {
+      if (!await directory!.exists()) {
         await directory.create(recursive: true);
       }
       if (await directory.exists()) {
         File savePage = File(directory.path + "/" + page.toString() + ".png");
-        await dio.download(url, savePage.path,
+        await dio.download(downloadUrl, savePage.path,
             onReceiveProgress: (downloaded, total) {});
-        return directory.path;
+        AppHelper.hideLoading();
       }
     } catch (e) {
       print(e);
+      AppHelper.hideLoading();
     }
-    return "";
   }
 
   Future<bool> downloadAllPages() async {
@@ -146,7 +100,7 @@ class MainController extends GetxController {
       if (Platform.isAndroid) {
         if (await _requestPermission(Permission.storage)) {
           directory = await getApplicationDocumentsDirectory();
-          directory = Directory(directory.path + "/" + "QuranPages");
+          directory = Directory('${directory.path}/$localFolder');
           print("PATH ANDROID : " + directory.path);
         } else {
           return false;
@@ -157,7 +111,7 @@ class MainController extends GetxController {
           print("PERMISSION GRANTED");
           directory = await getApplicationDocumentsDirectory();
           print("PATH IOS : " + directory.path);
-          directory = Directory(directory.path + "/" + "QuranPages");
+          directory = Directory('${directory.path}/$localFolder');
           print("PATH IOS 2 : " + directory.path);
         } else {
           print("PERMISSION NOT GRANTED");
@@ -173,15 +127,9 @@ class MainController extends GetxController {
           if (cancelDownload) {
             break;
           }
-          NumberFormat formatter = new NumberFormat("0000");
-          int pageNum = (page + 3);
-          String pageNumUrl = formatter.format(pageNum);
-          String url = "https://www.searchtruth.org/quran/images4/" +
-              pageNumUrl +
-              ".jpg";
-
+          String downloadUrl = _getDownloadUrl(page);
           File savePage = File(directory.path + "/" + page.toString() + ".png");
-          await dio.download(url, savePage.path,
+          await dio.download(downloadUrl, savePage.path,
               onReceiveProgress: (downloaded, total) {});
           tot++;
           _progress.value += 1;
@@ -214,27 +162,19 @@ class MainController extends GetxController {
     cancelDownload = true;
   }
 
-  void setExist() {
-    _exist.value = true;
-  }
-
-  void changeBarState() {
-    _barState.value = !_barState.value;
-    update();
-  }
-
   void setDownloadVisible() {
-    _showDownload.value = true;
+    showDownload.value = true;
     update();
   }
 
   void setDownloadInVisible() {
-    _showDownload.value = false;
+    showDownload.value = false;
     update();
   }
 
-  void changeCurrentPage(int page) {
-    _currentPage.value = page;
+  Future<void> changeCurrentPage(int page) async {
+    currentPage.value = page + 1;
+    await saveLastPage(page + 1);
   }
 
   void changeSurah(int page) {
@@ -244,83 +184,15 @@ class MainController extends GetxController {
   void sharePage() {
     Share.shareFiles([
       '/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/' +
-          _currentPage.value.toString() +
+          currentPage.value.toString() +
           '.png'
     ], text: 'ورد اليوم');
   }
 
-  Future<void> addToMarks() async {
-    Get.dialog(
-      AlertDialog(
-        title: const Text('حفظ كعلامه مرجعيه'),
-        content: Container(
-          height: 100,
-          child: Column(
-            children: [
-              TextButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.brown)),
-                child: const Text(
-                  "علامه القراءه",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  Mark m = await dbHelper.insertMark(Mark(
-                      0,
-                      _currentPage.value!,
-                      surahList
-                          .where((element) => element.page <= currentPage!)
-                          .toList()
-                          .last
-                          .name,
-                      1,
-                      DateTime.now().toString()));
-                  Get.back();
-                  Get.snackbar("تم", "تم حفظ العلامه",
-                      backgroundColor: Colors.green, colorText: Colors.white);
-                },
-              ),
-              TextButton(
-                style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.brown)),
-                child: const Text(
-                  "علامه الحفظ",
-                  style: TextStyle(color: Colors.white),
-                ),
-                onPressed: () async {
-                  Mark m = await dbHelper.insertMark(Mark(
-                      0,
-                      _currentPage.value!,
-                      surahList
-                          .where((element) => element.page <= currentPage!)
-                          .toList()
-                          .last
-                          .name,
-                      2,
-                      DateTime.now().toString()));
-                  Get.back();
-                  Get.snackbar("تم", "تم حفظ العلامه",
-                      backgroundColor: Colors.green, colorText: Colors.white);
-                },
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Future<void> getAllMarks() async {
-    _loading.value = true;
-    //update();
-    marksList = (await dbHelper.getAllMarks())!;
-    marksList = marksList.reversed.toList();
-    _loading.value = false;
-    update();
-  }
-
-  Future<void> deleteMark(int id) async {
-    int d = await dbHelper.deleteMark(id);
-    getAllMarks();
+  String _getDownloadUrl(int page) {
+    NumberFormat formatter = new NumberFormat("0000");
+    int pageNum = (page + 3);
+    String pageNumUrl = formatter.format(pageNum);
+    return "$baseUrl/$pageStyleEndPoint/" + pageNumUrl + ".jpg";
   }
 }
