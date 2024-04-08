@@ -1,17 +1,16 @@
 import 'dart:io';
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:quran/data_source/local/local_data_source.dart';
+import 'package:quran/data_source/remote/remote_data_source.dart';
 import 'package:quran/utils/app_helper.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../utils/constants.dart';
 
 class MainController extends GetxController {
-
   ValueNotifier<int> _progress = ValueNotifier(0);
 
   ValueNotifier<int> get progress => _progress;
@@ -24,35 +23,32 @@ class MainController extends GetxController {
 
   bool cancelDownload = false;
 
-  final Dio dio = Dio();
-
   PageController pageController = PageController();
+
+  late final RemoteDataSource? _remoteDataSource;
+  late final LocalDataSource? _localDataSource;
 
   @override
   Future<void> onInit() async {
     super.onInit();
+    _remoteDataSource = RemoteDataSource.getInstance();
+    _localDataSource = LocalDataSource.getInstance();
     getLastPage();
   }
 
   void getLastPage() async {
     isLoadingLastPage.value = true;
-    final prefs = await SharedPreferences.getInstance();
-    final int? page = prefs.getInt('last_page');
-    print("LAST PAGE : " + page.toString());
-    currentPage.value = (page == null ? 1 : page);
+    currentPage.value = await _localDataSource!.getLastPage();
     pageController = PageController(initialPage: currentPage.value - 1);
     isLoadingLastPage.value = false;
   }
 
   Future<void> saveLastPage(int page) async {
-    final prefs = await SharedPreferences.getInstance();
-    print("SAVE LOCAL PAGE : " + page.toString());
-    await prefs.setInt('last_page', page);
+    await _localDataSource!.saveLastPage(page);
   }
 
   Future<void> downloadPage(int page) async {
     AppHelper.showLoading();
-    String downloadUrl = _getDownloadUrl(page);
     Directory? directory;
     try {
       if (Platform.isAndroid) {
@@ -79,8 +75,7 @@ class MainController extends GetxController {
       }
       if (await directory.exists()) {
         File savePage = File(directory.path + "/" + page.toString() + ".png");
-        await dio.download(downloadUrl, savePage.path,
-            onReceiveProgress: (downloaded, total) {});
+        await _remoteDataSource?.downloadPage(page, savePage);
         AppHelper.hideLoading();
       }
     } catch (e) {
@@ -127,10 +122,8 @@ class MainController extends GetxController {
           if (cancelDownload) {
             break;
           }
-          String downloadUrl = _getDownloadUrl(page);
           File savePage = File(directory.path + "/" + page.toString() + ".png");
-          await dio.download(downloadUrl, savePage.path,
-              onReceiveProgress: (downloaded, total) {});
+          await _remoteDataSource?.downloadPage(page, savePage);
           tot++;
           _progress.value += 1;
           final prefs = await SharedPreferences.getInstance();
@@ -189,10 +182,4 @@ class MainController extends GetxController {
     ], text: 'ورد اليوم');
   }
 
-  String _getDownloadUrl(int page) {
-    NumberFormat formatter = new NumberFormat("0000");
-    int pageNum = (page + 3);
-    String pageNumUrl = formatter.format(pageNum);
-    return "$baseUrl/$pageStyleEndPoint/" + pageNumUrl + ".jpg";
-  }
 }

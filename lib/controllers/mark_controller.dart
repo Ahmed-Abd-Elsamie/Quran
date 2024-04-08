@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:quran/db_helper/database_helper.dart';
+import 'package:quran/data_source/local/database_helper.dart';
 import 'package:quran/models/mark.dart';
 import 'package:quran/utils/constants.dart';
 
