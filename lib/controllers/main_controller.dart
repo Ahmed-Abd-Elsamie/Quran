@@ -175,11 +175,9 @@ class MainController extends GetxController {
   }
 
   void sharePage() {
-    Share.shareFiles([
-      '/storage/emulated/0/Android/data/com.deksheno.quran/files/QuranPages/' +
-          currentPage.value.toString() +
-          '.png'
-    ], text: 'ورد اليوم');
+    Share.shareXFiles(
+        [XFile('$localBaseUrl/' + currentPage.value.toString() + '.png')],
+        text: 'ورد اليوم');
   }
 
 }
