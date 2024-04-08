@@ -193,30 +193,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.0.0"
-  firebase_auth:
-    dependency: "direct main"
-    description:
-      name: firebase_auth
-      sha256: "3fd6475e60d518c021e70e7d4262db7dac327adf496e71048545da2e0b9ca510"
-      url: "https://pub.dev"
-    source: hosted
-    version: "4.17.9"
-  firebase_auth_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_auth_platform_interface
-      sha256: d44458576804f246a126fe797547330d2f7bd62069ce12479b583082340a2e4d
-      url: "https://pub.dev"
-    source: hosted
-    version: "7.1.9"
-  firebase_auth_web:
-    dependency: transitive
-    description:
-      name: firebase_auth_web
-      sha256: "57262c987e4f4e30c3e9a31f41171348c7dfbcdb8c84faa4cf841cea33e0e499"
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.10.0"
   firebase_core:
     dependency: "direct main"
     description:
@@ -265,30 +241,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.0"
-  firebase_storage:
-    dependency: "direct main"
-    description:
-      name: firebase_storage
-      sha256: "1f73deac05f02275c4d267eb3db3e9617f67f5cf011cdda1b483b6d91a0f895b"
-      url: "https://pub.dev"
-    source: hosted
-    version: "11.6.10"
-  firebase_storage_platform_interface:
-    dependency: transitive
-    description:
-      name: firebase_storage_platform_interface
-      sha256: b7d6da9f3114a095632512fdd1f8eb346eff7f5107e3391c93826ba882684033
-      url: "https://pub.dev"
-    source: hosted
-    version: "5.1.13"
-  firebase_storage_web:
-    dependency: transitive
-    description:
-      name: firebase_storage_web
-      sha256: d02e7804a129538fe4ff256a4d1617bdaf86ad8971352c1b381ee2a43e6e38e7
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.8.0"
   fixnum:
     dependency: transitive
     description:
@@ -328,14 +280,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.6.6"
-  http:
-    dependency: transitive
-    description:
-      name: http
-      sha256: "761a297c042deedc1ffbb156d6e2af13886bb305c2a343a4d972504cd67dd938"
-      url: "https://pub.dev"
-    source: hosted
-    version: "1.2.1"
   http_parser:
     dependency: transitive
     description:
@@ -352,14 +296,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.7"
-  image_gallery_saver:
-    dependency: "direct main"
-    description:
-      name: image_gallery_saver
-      sha256: "0aba74216a4d9b0561510cb968015d56b701ba1bd94aace26aacdd8ae5761816"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.0.3"
   intl:
     dependency: "direct main"
     description:
@@ -592,14 +528,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.7.4"
-  searchable_listview:
-    dependency: "direct main"
-    description:
-      name: searchable_listview
-      sha256: "0fca501ded8268eec601191cdafa98ab3622383e7186ffbfd49be602351e3bee"
-      url: "https://pub.dev"
-    source: hosted
-    version: "2.11.0"
   share_plus:
     dependency: "direct main"
     description:
