@@ -181,7 +181,8 @@ class MainController extends GetxController {
           await Share.shareXFiles([XFile(localPath)], text: 'ورد اليوم');
     } else {
       Get.defaultDialog(
-        title: "Down",
+        title: "تحميل الصفحة",
+        content: Text("يجب تحميل الصفحة أولا قبل المشاركة"),
       );
     }
   }
