@@ -174,10 +174,15 @@ class MainController extends GetxController {
     pageController.jumpToPage(page - 1);
   }
 
-  void sharePage() {
-    Share.shareXFiles(
-        [XFile('$localBaseUrl/' + currentPage.value.toString() + '.png')],
-        text: 'ورد اليوم');
+  Future<void> sharePage() async {
+    String localPath = "$localBaseUrl/" + currentPage.value.toString() + ".png";
+    if (File(localPath).existsSync()) {
+      final result =
+          await Share.shareXFiles([XFile(localPath)], text: 'ورد اليوم');
+    } else {
+      Get.defaultDialog(
+        title: "Down",
+      );
+    }
   }
-
 }
