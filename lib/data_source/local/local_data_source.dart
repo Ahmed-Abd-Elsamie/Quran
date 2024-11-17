@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalDataSource {
   static LocalDataSource? _instance;
+  late SharedPreferences _sharedPreferences;
 
   static LocalDataSource? getInstance() {
     if (_instance == null) {
@@ -10,14 +11,16 @@ class LocalDataSource {
     return _instance;
   }
 
-  Future<void> saveLastPage(int page) async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('last_page', page);
+  Future<void> initLocalDataSource() async {
+    _sharedPreferences = await SharedPreferences.getInstance();
   }
 
-  Future<int> getLastPage() async {
-    final prefs = await SharedPreferences.getInstance();
-    final int? page = prefs.getInt('last_page');
+  Future<void> saveLastPage(int page) async {
+    await _sharedPreferences.setInt('last_page', page);
+  }
+
+  int getLastPage() {
+    final int? page = _sharedPreferences.getInt('last_page');
     return page ?? 1;
   }
 }
