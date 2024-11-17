@@ -1,8 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
-
-import '../models/notification_model.dart';
+import 'package:quran/models/notification_model.dart';
 
 class NotificationsController extends GetxController {
   final CollectionReference _notification_ref =

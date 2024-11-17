@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran/controllers/main_controller.dart';
-import 'package:quran/controllers/mark_controller.dart';
+import 'package:quran/modules/marks/controller/mark_controller.dart';
 
 class SavedMarks extends StatelessWidget {
   final _mainController = Get.put(MainController());

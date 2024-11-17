@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:modal_bottom_sheet/modal_bottom_sheet.dart';
 import 'package:quran/controllers/main_controller.dart';
-import 'package:quran/controllers/mark_controller.dart';
+import 'package:quran/modules/marks/controller/mark_controller.dart';
 import 'package:quran/models/part.dart';
 import 'package:quran/models/surah.dart';
 import 'package:quran/utils/constants.dart';
-import 'package:quran/views/notification_page.dart';
-import 'package:quran/views/saved_marks.dart';
-import 'package:quran/views/widget/download_progress_widget.dart';
-import 'package:quran/views/widget/quran_page.dart';
+import 'package:quran/modules/notifications/view/notification_page.dart';
+import 'package:quran/modules/marks/view/saved_marks.dart';
+import 'package:quran/widget/download_progress_widget.dart';
+import 'package:quran/widget/quran_page.dart';
 
 class Home extends GetWidget<MainController> {
   final _mainController = Get.put(MainController());

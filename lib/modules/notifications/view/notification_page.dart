@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controllers/notifications_controller.dart';
+import '../controller/notifications_controller.dart';
 
 class NotificationPage extends StatelessWidget {
   final _notificationController = Get.put(NotificationsController());
