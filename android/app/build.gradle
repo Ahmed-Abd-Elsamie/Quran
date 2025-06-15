@@ -35,7 +35,7 @@ if (keystorePropertiesFile.exists()) {
 
 android {
     namespace "com.deksheno.quran"
-    compileSdk flutter.compileSdkVersion
+    compileSdk = 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -53,7 +53,7 @@ android {
 
     defaultConfig {
         applicationId "com.deksheno.quran"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
