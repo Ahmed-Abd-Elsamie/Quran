@@ -62,15 +62,11 @@ void handleFirebaseNotification() {
 
   FirebaseMessaging.onBackgroundMessage(_onMessageReceived);
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    if (message.notification != null) {
-      pushNotification(message);
-    }
+    pushNotification(message);
   });
 
   FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-    if (message.notification != null) {
-      pushNotification(message);
-    }
+    pushNotification(message);
   });
 }
 
@@ -106,13 +102,25 @@ Future<void> _onMessageReceived(RemoteMessage message) async {
 }
 
 void pushNotification(message) {
+  Map msgData = {};
+  if (message.data['title'] == null || message.data['body'] == null) {
+    if (message.notification != null) {
+      msgData['title'] = message.notification?.title ?? 'No Title';
+      msgData['body'] = message.notification?.body ?? 'No Body';
+    } else {
+      msgData['title'] = 'No Title';
+      msgData['body'] = 'No Body';
+    }
+  } else {
+    msgData = message.data;
+  }
   AwesomeNotifications().createNotification(
     content: NotificationContent(
       id: DateTime.now().millisecond,
       channelKey: 'basic_channel',
       color: primaryColor,
-      title: message.data['title'],
-      body: message.data['body'],
+      title: msgData['title'],
+      body: msgData['body'],
       icon: 'resource://drawable/logo',
     ),
   );

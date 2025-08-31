@@ -12,12 +12,7 @@
           "package_name": "com.deksheno.quran"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "597020592128-7uu79ohr0esu56021fsvamrb4tn5nuvl.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
           "current_key": "AIzaSyDD1XHHalZcfEfpRjtG22IGWqm0HT4alSQ"
@@ -25,12 +20,26 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "597020592128-7uu79ohr0esu56021fsvamrb4tn5nuvl.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597020592128:android:6a0dd1232b4fe67f03f0e5",
+        "android_client_info": {
+          "package_name": "com.example.quranapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD1XHHalZcfEfpRjtG22IGWqm0HT4alSQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
         }
       }
     }

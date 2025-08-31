@@ -17,19 +17,13 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
       case TargetPlatform.iOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for ios - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -54,9 +48,29 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyDD1XHHalZcfEfpRjtG22IGWqm0HT4alSQ',
-    appId: '1:597020592128:android:6a0dd1232b4fe67f03f0e5',
+    appId: '1:597020592128:android:b4afb816351191c803f0e5',
     messagingSenderId: '597020592128',
     projectId: 'quran-9bce1',
     storageBucket: 'quran-9bce1.appspot.com',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyB6WDWqbH4TsPFTEEG0TmEPbuETYXAW314',
+    appId: '1:597020592128:web:2feb7033d09f91d403f0e5',
+    messagingSenderId: '597020592128',
+    projectId: 'quran-9bce1',
+    authDomain: 'quran-9bce1.firebaseapp.com',
+    storageBucket: 'quran-9bce1.appspot.com',
+    measurementId: 'G-J3T3E5FL0E',
+  );
+
+  static const FirebaseOptions ios = FirebaseOptions(
+    apiKey: 'AIzaSyAxNrFqAviUiZ9DiCSfVoN1Ddo_dNVjNM0',
+    appId: '1:597020592128:ios:8c80ac7cc6e1b0f703f0e5',
+    messagingSenderId: '597020592128',
+    projectId: 'quran-9bce1',
+    storageBucket: 'quran-9bce1.appspot.com',
+    iosBundleId: 'com.deksheno.quran',
+  );
+
 }
