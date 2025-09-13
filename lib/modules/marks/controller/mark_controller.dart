@@ -29,7 +29,7 @@ class MarksController extends GetxController {
             children: [
               TextButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.brown)),
+                    backgroundColor: WidgetStateProperty.all(Colors.brown)),
                 child: const Text(
                   "علامه القراءه",
                   style: TextStyle(color: Colors.white),
@@ -52,7 +52,7 @@ class MarksController extends GetxController {
               ),
               TextButton(
                 style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.brown)),
+                    backgroundColor: WidgetStateProperty.all(Colors.brown)),
                 child: const Text(
                   "علامه الحفظ",
                   style: TextStyle(color: Colors.white),

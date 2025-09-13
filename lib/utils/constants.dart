@@ -1,8 +1,4 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:quran/data_source/local/local_data_source.dart';
 import 'package:quran/models/part.dart';
 import 'package:quran/models/surah.dart';
 

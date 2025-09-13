@@ -28,13 +28,12 @@ class NotificationPage extends StatelessWidget {
                             children: [
                               TextButton(
                                   style: ButtonStyle(
-                                      padding: MaterialStateProperty.all(
+                                      padding: WidgetStateProperty.all(
                                           EdgeInsets.only(right: 20, top: 10)),
                                       backgroundColor:
-                                          MaterialStateProperty.all(
-                                              Colors.white),
-                                      elevation: MaterialStateProperty.all(5),
-                                      shape: MaterialStateProperty.all<
+                                          WidgetStateProperty.all(Colors.white),
+                                      elevation: WidgetStateProperty.all(5),
+                                      shape: WidgetStateProperty.all<
                                               RoundedRectangleBorder>(
                                           RoundedRectangleBorder(
                                         borderRadius:

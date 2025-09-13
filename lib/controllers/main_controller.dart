@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran/data_source/local/local_data_source.dart';
-import 'package:quran/utils/constants.dart';
 import 'package:share_plus/share_plus.dart';
 
 class MainController extends GetxController {

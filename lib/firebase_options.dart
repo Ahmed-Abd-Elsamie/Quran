@@ -72,5 +72,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'quran-9bce1.appspot.com',
     iosBundleId: 'com.deksheno.quran',
   );
-
 }

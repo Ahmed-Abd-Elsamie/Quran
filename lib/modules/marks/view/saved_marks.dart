@@ -35,13 +35,13 @@ class SavedMarks extends StatelessWidget {
                   margin: EdgeInsets.all(5),
                   child: TextButton(
                       style: ButtonStyle(
-                          padding: MaterialStateProperty.all(
+                          padding: WidgetStateProperty.all(
                               EdgeInsets.only(right: 20, top: 10)),
                           backgroundColor:
-                              MaterialStateProperty.all(Colors.white),
-                          elevation: MaterialStateProperty.all(5),
+                              WidgetStateProperty.all(Colors.white),
+                          elevation: WidgetStateProperty.all(5),
                           shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
+                              WidgetStateProperty.all<RoundedRectangleBorder>(
                                   RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ))),
