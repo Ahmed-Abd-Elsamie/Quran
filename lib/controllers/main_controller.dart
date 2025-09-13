@@ -14,7 +14,16 @@ class MainController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     _localDataSource = LocalDataSource.getInstance();
+    await saveIosPath();
     getLastPage();
+  }
+
+  Future<void> saveIosPath() async {
+    await _localDataSource?.saveIosPath();
+  }
+
+  String getIosPath() {
+    return _localDataSource?.getIosPath() ?? '';
   }
 
   void getLastPage() async {
@@ -35,8 +44,15 @@ class MainController extends GetxController {
     pageController.jumpToPage(page - 1);
   }
 
+  localBaseUrl() => (Platform.isAndroid)
+      ? "/data/user/0/com.deksheno.quran/app_flutter/QuranPages"
+      : (Platform.isIOS)
+          ? getIosPath()
+          : "";
+
   Future<void> sharePage() async {
-    String localPath = "$localBaseUrl/" + currentPage.value.toString() + ".png";
+    String localPath =
+        "${localBaseUrl()}/" + currentPage.value.toString() + ".png";
     if (File(localPath).existsSync()) {
       await Share.shareXFiles([XFile(localPath)], text: 'ورد اليوم');
     } else {

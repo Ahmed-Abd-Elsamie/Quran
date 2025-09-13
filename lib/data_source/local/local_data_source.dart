@@ -1,3 +1,4 @@
+import 'package:path_provider/path_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class LocalDataSource {
@@ -22,5 +23,16 @@ class LocalDataSource {
   int getLastPage() {
     final int? page = _sharedPreferences.getInt('last_page');
     return page ?? 1;
+  }
+
+  Future<void> saveIosPath() async {
+    final directory = await getTemporaryDirectory();
+    await _sharedPreferences.setString(
+        'ios_path', '${directory.path}/QuranPages');
+  }
+
+  String getIosPath() {
+    final String? path = _sharedPreferences.getString('ios_path');
+    return path ?? '';
   }
 }

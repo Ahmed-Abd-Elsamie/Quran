@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:quran/controllers/main_controller.dart';
 import 'package:quran/modules/home/controller/quran_page_controller.dart';
 import 'package:quran/utils/constants.dart';
 import 'package:quran/widget/download_progress_widget.dart';
@@ -10,6 +11,8 @@ class QuranPage extends StatelessWidget {
   final QuranPageController _quranPageController =
       Get.put(QuranPageController());
 
+  final MainController _mainController = Get.find<MainController>();
+
   QuranPage({
     super.key,
     required this.page,
@@ -17,7 +20,7 @@ class QuranPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final String localPath = "$localBaseUrl/" + page.toString() + ".png";
+    final String localPath = "${_mainController.localBaseUrl()}/" + page.toString() + ".png";
 
     return Obx(() {
       if (_quranPageController.downloadingPagesStates[page] == true) {
