@@ -26,7 +26,7 @@ class LocalDataSource {
   }
 
   Future<void> saveIosPath() async {
-    final directory = await getTemporaryDirectory();
+    final directory = await getApplicationDocumentsDirectory();
     await _sharedPreferences.setString(
         'ios_path', '${directory.path}/QuranPages');
   }
