@@ -4,8 +4,8 @@ import 'package:quran/models/surah.dart';
 
 const primaryColor = Colors.brown;
 const secondaryColor = Colors.brown;
-const baseUrl = "https://www.searchtruth.org/quran";
-const pageStyleEndPoint = "images4";
+const baseUrl = "https://www.searchtruth.com/quran";
+const pageStyleEndPoint = "images/images4";
 const localFolder = "QuranPages";
 const localBaseUrl = "/data/user/0/com.deksheno.quran/app_flutter/QuranPages";
 

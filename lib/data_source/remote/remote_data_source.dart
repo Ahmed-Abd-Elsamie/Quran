@@ -6,7 +6,9 @@ import 'dart:io';
 class RemoteDataSource {
   static RemoteDataSource? _instance;
 
-  final _dio = Dio();
+  final _dio = Dio(
+
+  );
 
   static RemoteDataSource? getInstance() {
     if (_instance == null) {
@@ -17,6 +19,7 @@ class RemoteDataSource {
 
   Future<void> downloadPage(int page, File localFile) async {
     String downloadUrl = _getDownloadUrl(page);
+    print("DOWNLOAD URL ==> $downloadUrl");
     await _dio.download(downloadUrl, localFile.path,
         onReceiveProgress: (downloaded, total) {});
   }
