@@ -30,16 +30,13 @@ class QuranPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.white,
             ),
-            padding: EdgeInsets.only(top: 70, bottom: 30),
+            padding: EdgeInsets.symmetric(vertical: 20),
             child: FittedBox(
               fit: BoxFit.cover,
               clipBehavior: Clip.hardEdge,
               child: ClipRRect(
                 clipBehavior: Clip.hardEdge,
-                borderRadius: BorderRadius.circular(45),
                 child: Image.file(
-                  width: 100,
-                  height: 100,
                   File(localPath),
                 ),
               ),

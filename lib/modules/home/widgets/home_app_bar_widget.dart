@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:quran/modules/notifications/view/notification_page.dart';
+import 'package:quran/utils/constants.dart';
 
 class HomeAppBarWidget extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
@@ -21,16 +22,13 @@ class HomeAppBarWidget extends StatelessWidget {
       child: Container(
         alignment: Alignment.center,
         decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(color: Colors.black45, spreadRadius: 5, blurRadius: 5)
-          ],
+          color: primaryColor,
           borderRadius: BorderRadius.only(
               bottomRight: Radius.circular(20),
               bottomLeft: Radius.circular(20)),
         ),
-        padding: EdgeInsets.only(top: 25, right: 25),
-        height: 105,
+        padding: EdgeInsets.only(top: 0, right: 25),
+        height: 65,
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -39,7 +37,7 @@ class HomeAppBarWidget extends StatelessWidget {
               onPressed: onDrawerPress,
               icon: Icon(
                 Icons.menu,
-                color: Colors.brown,
+                color: Colors.white,
               ),
             ),
             TextButton.icon(
@@ -48,11 +46,11 @@ class HomeAppBarWidget extends StatelessWidget {
               },
               icon: Icon(
                 Icons.notifications,
-                color: Colors.brown,
+                color: Colors.white,
               ),
               label: Text(
                 "مقتطفات",
-                style: TextStyle(color: Colors.brown),
+                style: TextStyle(color: Colors.white),
               ),
             ),
             currentTitle,

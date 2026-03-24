@@ -18,7 +18,7 @@ class HomeBottomBarItemModel extends StatelessWidget {
       onPressed: onPress,
       label: Text(
         title,
-        style: TextStyle(color: Colors.brown),
+        style: TextStyle(color: Colors.white),
       ),
       icon: icon,
     );
