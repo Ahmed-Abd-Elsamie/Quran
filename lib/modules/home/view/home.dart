@@ -259,6 +259,7 @@ class Home extends GetWidget<MainController> {
       currentTitle: Obx(
         () => Text(
           _getSurahName(),
+          textAlign: TextAlign.center,
           style: TextStyle(color: Colors.white),
         ),
       ),

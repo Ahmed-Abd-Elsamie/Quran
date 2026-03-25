@@ -1,4 +1,4 @@
-package com.deksheno.quran
+package com.quranzekr
 
 import io.flutter.embedding.android.FlutterActivity
 

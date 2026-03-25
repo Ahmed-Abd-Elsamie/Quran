@@ -56,11 +56,20 @@ dependencies:
 
   dio: ^5.7.0
   permission_handler: ^12.0.0+1
+  device_info_plus: ^11.3.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: ^0.14.1
+  package_rename: ^1.10.1
+
+package_rename_config:
+  android:
+    package_name: "com.quranzekr"
+    override_old_package: "com.deksheno.quran"
+
+
 
 flutter_icons:
   android: true

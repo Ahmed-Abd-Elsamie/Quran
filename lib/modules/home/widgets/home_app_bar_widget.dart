@@ -53,7 +53,7 @@ class HomeAppBarWidget extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
             ),
-            currentTitle,
+            Expanded(child: currentTitle),
           ],
         ),
       ),

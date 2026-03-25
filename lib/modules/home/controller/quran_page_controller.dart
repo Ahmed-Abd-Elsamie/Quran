@@ -12,12 +12,22 @@ class QuranPageController extends GetxController {
   RxInt currentPage = 1.obs;
   bool cancelDownload = false;
 
+  // NEW: Store the dynamic path here so the UI can access it.
+  RxString baseDirectoryPath = ''.obs;
+
   late final RemoteDataSource? _remoteDataSource;
 
   @override
-  Future<void> onInit() async {
+  void onInit() {
     super.onInit();
+    _initSetup();
+  }
+
+  // NEW: Fetch the path immediately when the controller is born
+  Future<void> _initSetup() async {
     _remoteDataSource = RemoteDataSource.getInstance();
+    Directory dir = await _handleDownloadDirectory();
+    baseDirectoryPath.value = dir.path;
   }
 
   Future<void> downloadPage(int page) async {
@@ -34,7 +44,6 @@ class QuranPageController extends GetxController {
     cancelDownload = false;
     try {
       final prefs = await SharedPreferences.getInstance();
-      // Safely default to page 1 if null
       int lastDownloadedPage = prefs.getInt('last_download_page') ?? 1;
 
       progress.value = lastDownloadedPage;
@@ -46,7 +55,6 @@ class QuranPageController extends GetxController {
         }
         await _singlePageDownload(directory, page);
 
-        // Update progress and save state
         progress.value = page;
         await prefs.setInt('last_download_page', page);
       }
@@ -63,21 +71,14 @@ class QuranPageController extends GetxController {
 
   void setDownloadVisible() {
     showDownload.value = true;
-    update();
   }
 
   void setDownloadInVisible() {
     showDownload.value = false;
-    update();
   }
 
-  /// Handles creating and retrieving the safe, app-specific directory.
-  /// NO permissions are required for this on any Android or iOS version.
   Future<Directory> _handleDownloadDirectory() async {
-    // This safely gets the app's sandbox directory on both OSs
     Directory baseDir = await getApplicationDocumentsDirectory();
-
-    // Using your original folder names based on platform
     String folderName = Platform.isAndroid ? localFolder : "QuranPages";
     Directory targetDirectory = Directory('${baseDir.path}/$folderName');
 
@@ -96,7 +97,6 @@ class QuranPageController extends GetxController {
     } catch (e) {
       print('Failed to save page $page: $e');
     } finally {
-      // Use finally block to ensure state is ALWAYS reset, even if download fails
       downloadingPagesStates[page] = false;
     }
   }
