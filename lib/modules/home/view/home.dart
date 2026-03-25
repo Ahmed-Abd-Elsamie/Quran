@@ -26,15 +26,17 @@ class Home extends GetWidget<MainController> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      body: Stack(
-        children: [
-          // pages content
-          _buildPageContent(),
-          // upper bar
-          _buildAppBar(),
-          // lower bar
-          _buildBottomBar(context),
-        ],
+      body: SafeArea(
+        child: Stack(
+          children: [
+            // pages content
+            _buildPageContent(),
+            // upper bar
+            _buildAppBar(),
+            // lower bar
+            _buildBottomBar(context),
+          ],
+        ),
       ),
       drawer: Container(
         width: 270,
@@ -257,7 +259,8 @@ class Home extends GetWidget<MainController> {
       currentTitle: Obx(
         () => Text(
           _getSurahName(),
-          style: TextStyle(color: Colors.brown),
+          textAlign: TextAlign.center,
+          style: TextStyle(color: Colors.white),
         ),
       ),
       onDrawerPress: () {
@@ -273,7 +276,7 @@ class Home extends GetWidget<MainController> {
           title: "مشاركه",
           icon: Icon(
             Icons.share,
-            color: Colors.brown,
+            color: Colors.white,
           ),
           onPress: () {
             _mainController.sharePage();
@@ -283,7 +286,7 @@ class Home extends GetWidget<MainController> {
           title: "تفسير",
           icon: Icon(
             Icons.chat,
-            color: Colors.brown,
+            color: Colors.white,
           ),
           onPress: () {
             showMaterialModalBottomSheet(
@@ -310,7 +313,7 @@ class Home extends GetWidget<MainController> {
           title: "علامه",
           icon: Icon(
             Icons.bookmark_remove_outlined,
-            color: Colors.brown,
+            color: Colors.white,
           ),
           onPress: () {
             _marksController.addToMarks(_mainController.currentPage.value);
